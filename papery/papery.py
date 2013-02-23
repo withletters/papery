@@ -20,6 +20,7 @@ from __future__ import print_function, unicode_literals
 
 
 import papery.serving
+import papery.rendering
 
 
 class Papery(object):
@@ -28,7 +29,8 @@ class Papery(object):
         self.config = config
 
     def render(self, **args):
-        pass
+        renderer = papery.rendering.Renderer(self.config)
+        renderer.run()
 
     def run_server(self, **args):
         server = papery.serving.Server(root_dir="output", watch_dirs=["."],

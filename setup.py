@@ -28,6 +28,6 @@ setup(
     author="Xcoo, Inc.",
     author_email="developer@xcoo.jp",
     url="https://github.com/withletters/papery",
-    install_requires=["jinja2"],
+    install_requires=["jinja2", "markdown2"],
     packages=['papery'],
     scripts=['scripts/papery'])
