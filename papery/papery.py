@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 from __future__ import print_function, unicode_literals
 
+import os
 
 import papery.serving
 import papery.rendering
@@ -33,10 +34,19 @@ class Papery(object):
         renderer.run()
 
     def run_server(self, **args):
-        server = papery.serving.Server(root_dir="output", watch_dirs=["."],
-                                       change_handler=rebuild)
+        watch_dirs = []
+
+        theme_path = os.path.join("themes", self.config["theme"])
+        watch_dirs.append(os.path.abspath(theme_path))
+
+        for page in self.config["pages"]:
+            page_dirpath = os.path.dirname(page["file"])
+            watch_dirs.append(os.path.abspath(page_dirpath))
+
+        server = papery.serving.Server(root_dir="output",
+                                       watch_dirs=watch_dirs,
+                                       change_handler=self.rebuild)
         server.run()
 
-
-def rebuild():
-    print("Rebuild!")
+    def rebuild(self):
+        self.render()

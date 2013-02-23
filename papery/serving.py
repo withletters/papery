@@ -43,11 +43,14 @@ class Server(object):
         self.watch_dirs = [os.path.abspath(d) for d in watch_dirs]
         self.change_handler = change_handler
 
+        self.work_dir = os.getcwd()
+
     def run(self):
         if self.root_dir:
             os.chdir(self.root_dir)
 
-        wrap = RebuildHandlerWrapper(self.change_handler, self.watch_dirs)
+        wrap = RebuildHandlerWrapper(self.change_handler, self.watch_dirs,
+                                     self.work_dir)
         req_handler = wrap.request_handler
 
         server = HTTPServer((self.host, self.port), req_handler)
@@ -65,13 +68,14 @@ class Server(object):
 
 class RebuildHandlerWrapper(object):
 
-    def __init__(wrap_self, rebuild, watch_dirs):
+    def __init__(wrap_self, rebuild, watch_dirs, work_dir):
         """
         We can't pass arugments to HTTPRequestHandlers, because HTTPServer
         calls __init__. So make a closure.
         """
         wrap_self.rebuild = rebuild
         wrap_self.watch_dirs = watch_dirs
+        wrap_self.work_dir = work_dir
 
         wrap_self._modtime_sum = None
         wrap_self.changed()
@@ -85,7 +89,10 @@ class RebuildHandlerWrapper(object):
                 site before responding.
                 """
                 if wrap_self.changed():
+                    current_dir = os.getcwd()
+                    os.chdir(wrap_self.work_dir)
                     wrap_self.rebuild()
+                    os.chdir(current_dir)
 
                 SimpleHTTPRequestHandler.handle(self)
 
