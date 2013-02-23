@@ -15,16 +15,26 @@
 # limitations under the License.
 #
 
+from __future__ import absolute_import
 from __future__ import print_function, unicode_literals
+
+
+import papery.serving
 
 
 class Papery(object):
 
     def __init__(self, config={}):
-        pass
+        self.config = config
 
     def render(self, **args):
         pass
 
     def run_server(self, **args):
-        pass
+        server = papery.serving.Server(root_dir="output", watch_dirs=["."],
+                                       change_handler=rebuild)
+        server.run()
+
+
+def rebuild():
+    print("Rebuild!")
