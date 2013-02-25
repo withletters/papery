@@ -30,7 +30,7 @@ class Post(object):
     def __init__(self, filepath):
         self.filepath = filepath
 
-    def text(self, lang):
+    def text(self, lang=None):
 
         # TODO(takashi) switch with language
 
@@ -65,7 +65,10 @@ class Page(object):
 
         post = Post(self.post_file_name)
 
-        return self.template.render({"info": info, "post": post})
+        render_vars = {"post": post}
+        render_vars.update(info)
+
+        return self.template.render(render_vars)
 
 
 def linebreaksbr(arg):
