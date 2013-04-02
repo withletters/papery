@@ -68,7 +68,7 @@ class Page(object):
             info = {}
         except ValueError as e:
             print("JSON Parse error in %s" % self.info_file_name)
-            print(e.message)
+            print(e.args[0])
             return None
 
         post = Post(self.post_file_name)
