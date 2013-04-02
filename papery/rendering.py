@@ -158,7 +158,7 @@ class Renderer(object):
                 fp.close()
 
             self._page_maps.append({'location': output_filename,
-                                    'modified': os.path.getmtime(output_file_path)})
+                                    'modified': p.mtime})
 
     def _copy_assets(self):
         theme_path = os.path.join("themes", self.config["theme"])
