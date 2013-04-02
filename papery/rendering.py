@@ -44,7 +44,8 @@ class Renderer(object):
 
         if "pages" not in self.config:
             self.pages = [{"file": "pages/*.md",
-                           "template": "page.tmpl"}]
+                           "template": "page.tmpl",
+                           "path": "/"}]
 
         self._targets = {}
         self._page_maps = []
@@ -90,28 +91,56 @@ class Renderer(object):
         if not os.path.isdir(self.output_dir):
             os.mkdir(self.output_dir)
 
+        for p in self.config["pages"]:
+            if 'path' in p:
+                path = p['path']
+
+                if path.startswith('/'):
+                    path = path[1:]
+
+                path = os.path.join(self.output_dir, path)
+
+                if not os.path.isdir(path):
+                    os.makedirs(path)
+
     def _scan(self):
         for page in self.config["pages"]:
             page_dirpath = os.path.dirname(page["file"])
             page_basename = os.path.basename(page["file"])
+
+            page_output_dirpath = ""
+
+            if 'path' in page:
+                path = page['path']
+
+                if path.startswith('/'):
+                    path = path[1:]
+
+                page_output_dirpath = path
+
             for dirpath, _, _ in os.walk(page_dirpath):
                 match = os.path.join(dirpath, page_basename)
                 for p in glob.glob(match):
-                    self._targets[p] = page["template"]
+                    self._targets[p] = {'template': page['template'],
+                                        'path': page_output_dirpath}
 
     def _render_pages(self):
         theme_path = os.path.join("themes", self.config["theme"])
         theme_templates_path = os.path.join(theme_path, "templates")
 
-        for page, template in self._targets.items():
+        for page, render_vars in self._targets.items():
             page_base, _ = os.path.splitext(page)
             info = page_base + ".json"
             page_name = os.path.basename(page_base)
-            p = Page(template_dir=theme_templates_path, template_name=template,
+            p = Page(template_dir=theme_templates_path,
+                     template_name=render_vars['template'],
                      post_file_name=page, info_file_name=info)
 
             output_filename = page_name + ".html"
-            output_file_path = os.path.join(self.output_dir, output_filename)
+
+            output_file_path = os.path.join(self.output_dir,
+                                            render_vars['path'],
+                                            output_filename)
 
             if not os.path.exists(output_file_path) or os.path.getmtime(output_file_path) < p.mtime:
                 print("rendering %s" % page)
