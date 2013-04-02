@@ -148,9 +148,14 @@ class Renderer(object):
 
                     for n in names:
                         path = os.path.join(root, n)
+                        mtime = os.path.getmtime(path)
+
                         output_path = os.path.join(output_root, n)
-                        print("cp %s %s" % (path, output_path))
-                        shutil.copy(path, output_path)
+
+                        if not os.path.exists(output_path) or os.path.getmtime(output_path) < mtime:
+                            print("cp %s %s" % (path, output_path))
+                            shutil.copy(path, output_path)
+                            shutil.copystat(path, output_path)
 
             # Do nothing if the media directory doesn't exist
             except OSError:
