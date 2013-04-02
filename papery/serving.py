@@ -64,6 +64,8 @@ class Server(object):
             server.serve_forever()
         except KeyboardInterrupt:
             print("\nStopping development server...")
+        finally:
+            server.shutdown()
 
 
 class RebuildHandlerWrapper(object):
