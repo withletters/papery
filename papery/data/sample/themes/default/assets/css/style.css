@@ -1,0 +1,62 @@
+@charset "utf-8";
+
+body {
+    background: #f5f5f5;
+    font-family: Verdana, sans-serif;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #999;
+}
+
+a:hover {
+    color: #000 !important;
+}
+
+#container {
+    padding: 30px;
+}
+
+footer {
+    clear: both;
+    background: #dcdcdc;
+    width: 100%;
+    position: relative;
+}
+
+footer p {
+    padding: 3px;
+    text-align: center;
+    font-size: 10px;
+    color: #999;
+}
+
+#page {
+}
+
+#page h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#page h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#page h3 {
+    font-size: 18px;
+  padding: 30px 0 20px 0;
+    font-weight: bold;
+}
+
+#page h4 {
+  padding: 0 0 20px;
+    font-weight: bold;
+}
+
+#page p {
+  padding: 5px 0;
+}

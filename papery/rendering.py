@@ -31,6 +31,7 @@ except ImportError:
 
 from papery.page import Page
 from papery.sitemap import Sitemap
+from papery.util import weak_tree_copy
 
 
 class Renderer(object):
@@ -170,8 +171,8 @@ class Renderer(object):
         if not os.path.isdir(output_assets_dir):
             os.mkdir(output_assets_dir)
 
-        Renderer._tree_copy(theme_assets_path, output_assets_dir)
-        Renderer._tree_copy(page_assets_path, output_assets_dir)
+        weak_tree_copy(theme_assets_path, output_assets_dir)
+        weak_tree_copy(page_assets_path, output_assets_dir)
 
         robots_txt_path = os.path.join("files", "robots.txt")
         output_robots_txt_path = os.path.join(self.output_dir, "robots.txt")
@@ -181,45 +182,6 @@ class Renderer(object):
                 print("cp %s %s" % (robots_txt_path, output_robots_txt_path))
                 shutil.copy(robots_txt_path, output_robots_txt_path)
                 shutil.copystat(robots_txt_path, output_robots_txt_path)
-
-    @classmethod
-    def _tree_copy(cls, src, dst):
-        # Copy the media directory to the output folder
-        if os.path.isdir(src):
-            try:
-                for root, dirs, names in os.walk(src):
-                    relative_root = root.replace(src, "")
-
-                    if len(relative_root) > 0 and relative_root[0] == os.sep:
-                        relative_root = relative_root[1:]
-
-                    output_root = os.path.join(dst,
-                                               relative_root)
-
-                    if not os.path.isdir(output_root):
-                        os.mkdir(output_root)
-
-                    for d in dirs:
-                        output_d = os.path.join(output_root, d)
-                        if not os.path.isdir(output_d):
-                            print("mkdir %s" % output_d)
-                            os.mkdir(output_d)
-
-                    for n in names:
-                        path = os.path.join(root, n)
-                        mtime = os.path.getmtime(path)
-
-                        output_path = os.path.join(output_root, n)
-
-                        if not os.path.exists(output_path) or os.path.getmtime(output_path) < mtime:
-                            print("cp %s %s" % (path, output_path))
-                            shutil.copy(path, output_path)
-                            shutil.copystat(path, output_path)
-
-            # Do nothing if the media directory doesn't exist
-            except OSError:
-                print('There was a problem copying the media files '
-                      'to the output directory.')
 
     def _generate_sitemap(self):
 

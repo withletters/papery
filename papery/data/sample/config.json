@@ -1,0 +1,16 @@
+{
+    "author": "Your name",
+    "title": "My web site with papery",
+    "url": "http://www.example.com",
+    "email": "webmaster@example.com",
+    "keyword": "papery",
+    "description": "Web site with papery",
+    "theme": "default",
+    "pages": [
+        {
+            "file": "pages/*.md",
+            "template": "page.tmpl",
+            "path": "/"
+        }
+    ]
+}

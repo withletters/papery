@@ -48,6 +48,12 @@ class Engine(object):
                                 type=int,
                                 help='output debug log')
 
+        parser_init = subparsers.add_parser('init',
+                                            help='initialize site')
+        parser_init.add_argument('--debug',
+                                 type=int,
+                                 help='output debug log')
+
         parser_clean = subparsers.add_parser('clean',
                                              help='clear all')
 
@@ -70,5 +76,7 @@ class Engine(object):
             self.site.render(**args.__dict__)
         elif args.command == 'run':
             self.site.run_server(**args.__dict__)
+        elif args.command == 'init':
+            self.site.initialize(**args.__dict__)
         elif args.command == 'clean':
             self.site.clean(**args.__dict__)

@@ -23,6 +23,8 @@ import os
 import papery.serving
 import papery.rendering
 
+from papery.util import weak_tree_copy
+
 
 class Papery(object):
 
@@ -56,3 +58,10 @@ class Papery(object):
     def clean(self, **args):
         renderer = papery.rendering.Renderer(self.config)
         renderer.clean()
+
+    def initialize(self, **args):
+        sample_dir_path = os.path.join(os.path.dirname(__file__),
+                                       'data', 'sample')
+
+        weak_tree_copy(sample_dir_path, '.',
+                       overwrite_if_modified=False)

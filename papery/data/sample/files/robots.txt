@@ -1,0 +1,7 @@
+User-agent: *
+
+Sitemap: http://www.example.com/sitemap.xml.gz
+
+Disallow: /assets/css/*
+Disallow: /assets/img/*
+Disallow: /assets/js/*
