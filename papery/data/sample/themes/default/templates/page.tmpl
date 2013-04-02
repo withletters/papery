@@ -2,8 +2,29 @@
 
 {% block content %}
 
-<div id="page">
-{{ post.text(lang) }}
-</div>
+  <div id="page">
+    {{ post.text(lang) }}
+  </div>
+
+  {% if fruits is defined %}
+
+    <h3>My Favorite Fruits</h3>
+
+    <table>
+      <thead>
+        <th>Name</th>
+        <th>Color</th>
+      </thead>
+      <tbody>
+        {% for f in fruits %}
+          <tr>
+            <td>{{ f['name'] }}</td>
+            <td>{{ f['color'] }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  {% endif %}
 
 {% endblock %}
