@@ -34,6 +34,8 @@ class Papery(object):
         renderer.run()
 
     def run_server(self, **args):
+        self.render()
+
         watch_dirs = []
 
         theme_path = os.path.join("themes", self.config["theme"])
