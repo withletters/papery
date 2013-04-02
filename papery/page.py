@@ -96,11 +96,20 @@ class Page(object):
             fp.close()
 
         ast = self.template_env.parse(text)
-        refs = meta.find_referenced_templates(ast)
+        refs = list(meta.find_referenced_templates(ast))
 
-        for r in refs:
+        while len(refs) > 0:
+            r = refs.pop()
             t = self.template_env.get_template(r)
+
+            with codecs.open(t.filename, 'r', encoding="utf-8") as fp:
+                text = fp.read()
+                fp.close()
+
             mtimes.append(os.path.getmtime(t.filename))
+
+            ast = self.template_env.parse(text)
+            refs.extend(list(meta.find_referenced_templates(ast)))
 
         return max(mtimes)
 
