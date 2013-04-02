@@ -152,10 +152,16 @@ class Renderer(object):
                                             output_filename)
 
             if not os.path.exists(output_file_path) or os.path.getmtime(output_file_path) < p.mtime:
+                if os.path.exists(output_file_path):
+                    os.remove(output_file_path)
+
                 print("rendering %s" % page)
-                fp = codecs.open(output_file_path, 'w', encoding="utf-8")
-                fp.write(p.render())
-                fp.close()
+
+                text = p.render()
+
+                if text is not None:
+                    with codecs.open(output_file_path, 'w', encoding="utf-8") as fp:
+                        fp.write(text)
 
             self._page_maps.append({'location': output_filename,
                                     'modified': p.mtime})

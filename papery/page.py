@@ -61,11 +61,15 @@ class Page(object):
 
     def render(self):
         try:
-            with open(self.info_file_name) as info_file:
+            with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
                 info = json.load(info_file)
         except IOError:
             print("Not found info file %s" % self.info_file_name)
             info = {}
+        except ValueError as e:
+            print("JSON Parse error in %s" % self.info_file_name)
+            print(e.message)
+            return None
 
         post = Post(self.post_file_name)
 
