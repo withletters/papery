@@ -136,6 +136,15 @@ class Renderer(object):
         Renderer._tree_copy(theme_assets_path, output_assets_dir)
         Renderer._tree_copy(page_assets_path, output_assets_dir)
 
+        robots_txt_path = os.path.join("files", "robots.txt")
+        output_robots_txt_path = os.path.join(self.output_dir, "robots.txt")
+
+        if os.path.exists(robots_txt_path):
+            if not os.path.exists(output_robots_txt_path) or os.path.getmtime(output_robots_txt_path) < os.path.getmtime(robots_txt_path):
+                print("cp %s %s" % (robots_txt_path, output_robots_txt_path))
+                shutil.copy(robots_txt_path, output_robots_txt_path)
+                shutil.copystat(robots_txt_path, output_robots_txt_path)
+
     @classmethod
     def _tree_copy(cls, src, dst):
         # Copy the media directory to the output folder
