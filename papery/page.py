@@ -20,9 +20,13 @@ from __future__ import print_function, unicode_literals
 
 
 import jinja2
+from jinja2 import meta
+
 import markdown2
 import json
 import codecs
+
+import os
 
 
 class Post(object):
@@ -53,9 +57,9 @@ class Page(object):
         self.post_file_name = post_file_name
         self.info_file_name = info_file_name
 
-    def render(self):
         self.template = self.template_env.get_template(self.template_name)
 
+    def render(self):
         try:
             with open(self.info_file_name) as info_file:
                 info = json.load(info_file)
@@ -65,10 +69,40 @@ class Page(object):
 
         post = Post(self.post_file_name)
 
-        render_vars = {"post": post}
-        render_vars.update(info)
+        render_vars = info
+        render_vars.update({"post": post})
 
         return self.template.render(render_vars)
+
+    @property
+    def mtime(self):
+        template_mtime = self._template_mtime()
+
+        if os.path.exists(self.post_file_name):
+            post_mtime = os.path.getmtime(self.post_file_name)
+
+        if os.path.exists(self.info_file_name):
+            info_mtime = os.path.getmtime(self.info_file_name)
+
+        return max([template_mtime, post_mtime, info_mtime])
+
+    def _template_mtime(self):
+        mtimes = []
+
+        mtimes.append(os.path.getmtime(self.template.filename))
+
+        with codecs.open(self.template.filename, 'r', encoding="utf-8") as fp:
+            text = fp.read()
+            fp.close()
+
+        ast = self.template_env.parse(text)
+        refs = meta.find_referenced_templates(ast)
+
+        for r in refs:
+            t = self.template_env.get_template(r)
+            mtimes.append(os.path.getmtime(t.filename))
+
+        return max(mtimes)
 
 
 def linebreaksbr(arg):

@@ -96,7 +96,6 @@ class Renderer(object):
         theme_templates_path = os.path.join(theme_path, "templates")
 
         for page, template in self._targets.items():
-            print("rendering %s" % page)
             page_base, _ = os.path.splitext(page)
             info = page_base + ".json"
             page_name = os.path.basename(page_base)
@@ -105,9 +104,12 @@ class Renderer(object):
 
             output_filename = page_name + ".html"
             output_file_path = os.path.join(self.output_dir, output_filename)
-            fp = codecs.open(output_file_path, 'w', encoding="utf-8")
-            fp.write(p.render())
-            fp.close()
+
+            if not os.path.exists(output_file_path) or os.path.getmtime(output_file_path) < p.mtime:
+                print("rendering %s" % page)
+                fp = codecs.open(output_file_path, 'w', encoding="utf-8")
+                fp.write(p.render())
+                fp.close()
 
     def _copy_assets(self):
         theme_path = os.path.join("themes", self.config["theme"])
