@@ -23,8 +23,10 @@ import sys
 import glob
 import codecs
 import shutil
+import urlparse
 
 from papery.page import Page
+from papery.sitemap import Sitemap
 
 
 class Renderer(object):
@@ -41,6 +43,7 @@ class Renderer(object):
                            "template": "page.tmpl"}]
 
         self._targets = {}
+        self._page_maps = []
 
     def run(self):
         self._check()
@@ -48,6 +51,7 @@ class Renderer(object):
         self._scan()
         self._render_pages()
         self._copy_assets()
+        self._generate_sitemap()
 
     def _check(self):
         theme_path = os.path.join("themes", self.config["theme"])
@@ -111,6 +115,9 @@ class Renderer(object):
                 fp.write(p.render())
                 fp.close()
 
+            self._page_maps.append({'location': output_filename,
+                                    'modified': os.path.getmtime(output_file_path)})
+
     def _copy_assets(self):
         theme_path = os.path.join("themes", self.config["theme"])
         theme_assets_path = os.path.join(theme_path, "assets")
@@ -163,3 +170,17 @@ class Renderer(object):
             except OSError:
                 print('There was a problem copying the media files '
                       'to the output directory.')
+
+    def _generate_sitemap(self):
+
+        if 'url' in self.config:
+            site_url = self.config['url']
+        else:
+            site_url = '/'
+
+        for p in self._page_maps:
+            p['location'] = urlparse.urljoin(site_url, p['location'])
+
+        sitemap = Sitemap(self._page_maps)
+        path = os.path.join(self.output_dir, 'sitemap.xml')
+        sitemap.save(path)

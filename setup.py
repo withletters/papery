@@ -30,4 +30,5 @@ setup(
     url="https://github.com/withletters/papery",
     install_requires=["jinja2", "markdown2"],
     packages=['papery'],
+    package_data={'papery': ['sitemap_template.xml']},
     scripts=['scripts/papery'])
