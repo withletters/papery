@@ -23,7 +23,11 @@ import sys
 import glob
 import codecs
 import shutil
-import urlparse
+
+try:
+    from urlparse import urljoin
+except ImportError:
+    from urllib.parse import urljoin  # NOQA
 
 from papery.page import Page
 from papery.sitemap import Sitemap
@@ -179,7 +183,7 @@ class Renderer(object):
             site_url = '/'
 
         for p in self._page_maps:
-            p['location'] = urlparse.urljoin(site_url, p['location'])
+            p['location'] = urljoin(site_url, p['location'])
 
         sitemap = Sitemap(self._page_maps)
         path = os.path.join(self.output_dir, 'sitemap.xml')
