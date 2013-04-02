@@ -1,0 +1,47 @@
+# -*- coding: utf-8 -*-
+
+from fabric.api import run, abort, env, put, local
+from fabric.decorators import runs_once
+
+from fabric.contrib.console import confirm
+
+import os
+
+
+def www():
+    env.environment = "www"
+    env.forward_agent = True
+    env.port = 22
+    env.hosts = ["www.example.com"]
+    env.user = "user"
+
+
+@runs_once
+def _check():
+    if not confirm('deploy to %s?' % env.environment, default=False):
+        abort('deployment is cancelled.')
+
+
+def _clean(path):
+    TARGETS = ['.DS_Store']
+
+    for root, dirs, files in os.walk(path):
+        for name in files:
+            if name in TARGETS:
+                os.remove(os.path.join(str(root), str(name)))
+
+
+def deploy():
+    _check()
+
+    _clean("output")
+
+    local("tar czf files.tar.gz output/*")
+
+    put("files.tar.gz", "/tmp/")
+
+    local("rm -f files.tar.gz")
+
+    run("tar xvf /tmp/files.tar.gz -C /tmp")
+    run("cp -rf /tmp/output/* /var/www")
+    run("rm -rf /tmp/files.tar.gz /tmp/output")
