@@ -58,6 +58,14 @@ class Renderer(object):
         self._copy_assets()
         self._generate_sitemap()
 
+    def clean(self):
+        self._check()
+        self._remove_output()
+
+    def _remove_output(self):
+        if os.path.isdir(self.output_dir):
+            shutil.rmtree(self.output_dir)
+
     def _check(self):
         theme_path = os.path.join("themes", self.config["theme"])
         theme_templates_path = os.path.join(theme_path, "templates")

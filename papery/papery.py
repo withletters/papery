@@ -52,3 +52,7 @@ class Papery(object):
 
     def rebuild(self):
         self.render()
+
+    def clean(self, **args):
+        renderer = papery.rendering.Renderer(self.config)
+        renderer.clean()
