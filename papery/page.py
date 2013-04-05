@@ -84,9 +84,13 @@ class Page(object):
 
         if os.path.exists(self.post_file_name):
             post_mtime = os.path.getmtime(self.post_file_name)
+        else:
+            post_mtime = 0
 
         if os.path.exists(self.info_file_name):
             info_mtime = os.path.getmtime(self.info_file_name)
+        else:
+            info_mtime = 0
 
         return max([template_mtime, post_mtime, info_mtime])
 
