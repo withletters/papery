@@ -2,13 +2,28 @@ Papery version 0.1.3
 
 # Papery
 
-papery is a static web site generator with Markdown and JSON
+papery is  is a simple, static site generator written in Python - supports Markdown/JSON input and Jinja2 templating.
 
-## Installation
+# Features
 
+- Markdown and JSON as input.
+- Jinja2 templating.
+- Python 2 and 3 compatible.
+- Embed development web server (automatic updating)
+
+# Requirements
+
+- [Jinja2](http://jinja.pocoo.org/)
+- [markdown2](https://github.com/trentm/python-markdown2)
+
+# Installation
+
+papery is available on [pypi](https://pypi.python.org/pypi).
 To get the latest released version:
 
     pip install papery
+
+# Usage
 
 ## Creating new site
 
@@ -21,15 +36,22 @@ Run the following command
 
     papery run
 
-and access to <http://localhost:8000> with your web browser.
+access to <http://localhost:8000> with your web browser.
 
-All pages are automatically updated when you modified any assets.
+All pages are automatically updated when you modified any resources.
 
 ## Build manually
 
     papery build
 
-## License
+# TODO
+
+- documentation
+- validate Markdown/JSON syntax
+- code syntax highlight
+- create new pages via papery sub command
+
+# License
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 
