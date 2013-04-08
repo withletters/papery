@@ -107,8 +107,8 @@ def find_package_data(where='.', package='',
 
 setup(
     name="papery",
-    version="0.1.3",
-    description="Static Web Site Generator with Markdown and JSON",
+    version="0.1.4",
+    description="A simple, static site generator - supports Markdown/JSON input and Jinja2 templating.",
     long_description=__doc__,
     license="Apache License 2.0",
     author="Xcoo, Inc.",
