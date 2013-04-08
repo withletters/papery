@@ -53,6 +53,8 @@ class Server(object):
                                      self.work_dir)
         req_handler = wrap.request_handler
 
+        HTTPServer.allow_reuse_address = True
+
         server = HTTPServer((self.host, self.port), req_handler)
         socket_info = server.socket.getsockname()
 
