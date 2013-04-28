@@ -44,9 +44,10 @@ class Renderer(object):
             self.config["theme"] = "default"
 
         if "pages" not in self.config:
-            self.pages = [{"file": "pages/*.md",
-                           "template": "page.tmpl",
-                           "path": "/"}]
+            self.config['pages'] = []
+
+        if "assets" not in self.config:
+            self.config['assets'] = []
 
         self._targets = {}
         self._page_maps = []
@@ -73,7 +74,7 @@ class Renderer(object):
         theme_assets_path = os.path.join(theme_path, "assets")
 
         if not os.path.isdir(theme_path):
-            # logging.critical("This doesn't look like a wok site. Aborting.")
+            # logging.critical("Not found theme directory %s. Aborting.")
             print("Not found theme directory %s. Aborting." %
                   theme_path)
             sys.exit(1)
@@ -166,6 +167,10 @@ class Renderer(object):
             self._page_maps.append({'location': output_filename,
                                     'modified': p.mtime})
 
+    def _build_assets(self):
+        # TODO
+        pass
+
     def _copy_assets(self):
         theme_path = os.path.join("themes", self.config["theme"])
         theme_assets_path = os.path.join(theme_path, "assets")
@@ -190,7 +195,6 @@ class Renderer(object):
                 shutil.copystat(robots_txt_path, output_robots_txt_path)
 
     def _generate_sitemap(self):
-
         if 'url' in self.config:
             site_url = self.config['url']
         else:
