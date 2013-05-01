@@ -23,6 +23,7 @@ import sys
 import glob
 import codecs
 import shutil
+import filecmp
 
 try:
     from urlparse import urljoin
@@ -181,6 +182,15 @@ class Renderer(object):
 
         if not os.path.isdir(output_assets_dir):
             os.mkdir(output_assets_dir)
+
+        favicon_path = os.path.join(theme_path, 'favicon.ico')
+        output_favicon_path = os.path.join(self.output_dir, "favicon.ico")
+
+        if os.path.exists(favicon_path):
+            if not os.path.exists(output_favicon_path) or not filecmp.cmp(favicon_path, output_favicon_path):
+                print("cp %s %s" % (favicon_path, output_favicon_path))
+                shutil.copy(favicon_path, output_favicon_path)
+                shutil.copystat(favicon_path, output_favicon_path)
 
         weak_tree_copy(theme_assets_path, output_assets_dir)
         weak_tree_copy(page_assets_path, output_assets_dir)
