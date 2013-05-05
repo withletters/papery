@@ -3,7 +3,7 @@
     "title": "My web site with papery",
     "url": "http://www.example.com",
     "email": "webmaster@example.com",
-    "keyword": "papery",
+    "keywords": "papery",
     "description": "Web site with papery",
     "theme": "default",
     "pages": [

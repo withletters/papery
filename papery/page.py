@@ -59,7 +59,9 @@ class Page(object):
 
         self.template = self.template_env.get_template(self.template_name)
 
-    def render(self):
+    def render(self,
+               author='', title='',
+               url='', email='', keywords='', description=''):
         try:
             with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
                 info = json.load(info_file)
@@ -75,6 +77,24 @@ class Page(object):
 
         render_vars = info
         render_vars.update({"post": post})
+
+        if 'author' not in render_vars or len(render_vars['author']) == 0:
+            render_vars['author'] = author
+
+        if 'title' not in render_vars or len(render_vars['title']) == 0:
+            render_vars['title'] = title
+
+        if 'url' not in render_vars or len(render_vars['url']) == 0:
+            render_vars['url'] = url
+
+        if 'email' not in render_vars or len(render_vars['email']) == 0:
+            render_vars['email'] = email
+
+        if 'keywords' not in render_vars or len(render_vars['keywords']) == 0:
+            render_vars['keywords'] = keywords
+
+        if 'description' not in render_vars or len(render_vars['description']) == 0:
+            render_vars['description'] = description
 
         return self.template.render(render_vars)
 

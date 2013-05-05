@@ -158,8 +158,12 @@ class Renderer(object):
                     os.remove(output_file_path)
 
                 print("rendering %s" % page)
-
-                text = p.render()
+                text = p.render(author=self.config['author'],
+                                title=self.config['title'],
+                                url=self.config['url'],
+                                email=self.config['email'],
+                                keywords=self.config['keywords'],
+                                description=self.config['description'])
 
                 if text is not None:
                     with codecs.open(output_file_path, 'w', encoding="utf-8") as fp:
