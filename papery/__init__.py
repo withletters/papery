@@ -17,6 +17,4 @@
 
 from __future__ import absolute_import
 
-from .papery import Papery  # NOQA
-
 version = "0.1.5"

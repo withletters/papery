@@ -22,7 +22,8 @@ import sys
 import argparse
 #import logging
 
-from papery import Papery, version
+from papery import version
+from papery.papery import Papery
 import json
 
 
