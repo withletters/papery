@@ -22,6 +22,8 @@ from fnmatch import fnmatchcase
 import os
 import sys
 
+from papery import version
+
 standard_exclude = ('*.py', '*.pyc', '*~', '.*', '*.bak')
 standard_exclude_directories = ('.*', 'CVS', '_darcs', './build',
                                 './dist', 'EGG-INFO', '*.egg-info')
@@ -107,7 +109,7 @@ def find_package_data(where='.', package='',
 
 setup(
     name="papery",
-    version="0.1.5",
+    version=version,
     description="A simple, static site generator - supports Markdown/JSON input and Jinja2 templating.",
     long_description=__doc__,
     license="Apache License 2.0",

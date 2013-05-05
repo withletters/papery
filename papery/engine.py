@@ -15,13 +15,14 @@
 # limitations under the License.
 #
 
+from __future__ import absolute_import
 from __future__ import print_function, unicode_literals
 
 import sys
 import argparse
 #import logging
 
-from papery import Papery
+from papery import Papery, version
 import json
 
 
@@ -31,7 +32,7 @@ class Engine(object):
 
         parser = argparse.ArgumentParser()
 
-        # parser.add_argument('--foo', action='store_true', help='foo help')
+        parser.add_argument('--version', action='version', version=version)
 
         subparsers = parser.add_subparsers(help='sub-command help',
                                            dest='command')
