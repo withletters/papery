@@ -70,7 +70,10 @@ class Papery(object):
         self.render()
 
     def clean(self, **args):
-        renderer = papery.rendering.Renderer(self.config)
+        renderer = papery.rendering.Renderer(self.config,
+                                             self.themes_dir,
+                                             self.files_dir,
+                                             self.output_dir)
         renderer.clean()
 
     def initialize(self, **args):

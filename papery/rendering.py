@@ -69,11 +69,44 @@ class Renderer(object):
 
     def clean(self):
         self._check()
+        self._scan()
         self._remove_output()
 
     def _remove_output(self):
-        if os.path.isdir(self.output_dir):
-            shutil.rmtree(self.output_dir)
+        for page, render_vars in self._targets.items():
+            page_base, _ = os.path.splitext(page)
+            page_name = os.path.basename(page_base)
+            output_filename = page_name + ".html"
+            output_file_path = os.path.join(self.output_dir,
+                                            render_vars['path'],
+                                            output_filename)
+
+            if os.path.exists(output_file_path):
+                os.remove(output_file_path)
+
+        output_assets_dir = os.path.join(self.output_dir, "assets")
+
+        if os.path.isdir(output_assets_dir):
+            shutil.rmtree(output_assets_dir)
+
+        output_favicon_path = os.path.join(self.output_dir, "favicon.ico")
+
+        if os.path.exists(output_favicon_path):
+            os.remove(output_favicon_path)
+
+        output_robots_txt_path = os.path.join(self.output_dir, "robots.txt")
+
+        if os.path.exists(output_robots_txt_path):
+            os.remove(output_robots_txt_path)
+
+        output_sitemap_path = os.path.join(self.output_dir, 'sitemap.xml')
+        output_sitemap_gz_path = os.path.join(self.output_dir, 'sitemap.xml.gz')
+
+        if os.path.exists(output_sitemap_path):
+            os.remove(output_sitemap_path)
+
+        if os.path.exists(output_sitemap_gz_path):
+            os.remove(output_sitemap_gz_path)
 
     def _check(self):
         theme_path = os.path.join(self.themes_dir, self.config["theme"])
