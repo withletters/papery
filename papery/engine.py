@@ -18,13 +18,14 @@
 from __future__ import absolute_import
 from __future__ import print_function, unicode_literals
 
+from papery import version
+from papery.papery import Papery
+
+import json
+import os
 import sys
 import argparse
 #import logging
-
-from papery import version
-from papery.papery import Papery
-import json
 
 
 class Engine(object):
@@ -66,7 +67,14 @@ class Engine(object):
         args = parser.parse_args()
 
         try:
-            with open('config.json') as config_file:
+            config_path = ''
+
+            if os.path.exists('config.json'):
+                config_path = 'config.json'
+            elif os.path.exists('.config.json'):
+                config_path = '.config.json'
+
+            with open(config_path) as config_file:
                 config = json.load(config_file)
                 self.site = Papery(config)
         except IOError:

@@ -37,9 +37,15 @@ from papery.util import weak_tree_copy
 
 class Renderer(object):
 
-    def __init__(self, config, output_dir="output"):
+    def __init__(self, config,
+                 themes_dir="themes",
+                 files_dir="files",
+                 output_dir="output"):
         self.config = config
+
         self.output_dir = output_dir
+        self.themes_dir = themes_dir
+        self.files_dir = files_dir
 
         if "theme" not in self.config:
             self.config["theme"] = "default"
@@ -70,7 +76,7 @@ class Renderer(object):
             shutil.rmtree(self.output_dir)
 
     def _check(self):
-        theme_path = os.path.join("themes", self.config["theme"])
+        theme_path = os.path.join(self.themes_dir, self.config["theme"])
         theme_templates_path = os.path.join(theme_path, "templates")
         theme_assets_path = os.path.join(theme_path, "assets")
 
@@ -136,7 +142,7 @@ class Renderer(object):
                                         'path': page_output_dirpath}
 
     def _render_pages(self):
-        theme_path = os.path.join("themes", self.config["theme"])
+        theme_path = os.path.join(self.themes_dir, self.config["theme"])
         theme_templates_path = os.path.join(theme_path, "templates")
 
         for page, render_vars in self._targets.items():
@@ -177,10 +183,10 @@ class Renderer(object):
         pass
 
     def _copy_assets(self):
-        theme_path = os.path.join("themes", self.config["theme"])
+        theme_path = os.path.join(self.themes_dir, self.config["theme"])
         theme_assets_path = os.path.join(theme_path, "assets")
 
-        page_assets_path = os.path.join("files", "assets")
+        page_assets_path = os.path.join(self.files_dir, "assets")
 
         output_assets_dir = os.path.join(self.output_dir, "assets")
 
@@ -199,7 +205,7 @@ class Renderer(object):
         weak_tree_copy(theme_assets_path, output_assets_dir)
         weak_tree_copy(page_assets_path, output_assets_dir)
 
-        robots_txt_path = os.path.join("files", "robots.txt")
+        robots_txt_path = os.path.join(self.files_dir, "robots.txt")
         output_robots_txt_path = os.path.join(self.output_dir, "robots.txt")
 
         if os.path.exists(robots_txt_path):

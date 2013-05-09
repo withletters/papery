@@ -31,8 +31,22 @@ class Papery(object):
     def __init__(self, config={}):
         self.config = config
 
+        if 'papery' in config:
+            c = config['papery']
+
+            self.output_dir = c['output'] if 'output' in c else 'output'
+            self.themes_dir = c['themes'] if 'themes' in c else 'themes'
+            self.files_dir = c['files'] if 'files' in c else 'files'
+        else:
+            self.output_dir = 'output'
+            self.themes_dir = 'themes'
+            self.files_dir = 'files'
+
     def render(self, **args):
-        renderer = papery.rendering.Renderer(self.config)
+        renderer = papery.rendering.Renderer(self.config,
+                                             self.themes_dir,
+                                             self.files_dir,
+                                             self.output_dir)
         renderer.run()
 
     def run_server(self, **args):
@@ -40,14 +54,14 @@ class Papery(object):
 
         watch_dirs = []
 
-        theme_path = os.path.join("themes", self.config["theme"])
+        theme_path = os.path.join(self.themes_dir, self.config["theme"])
         watch_dirs.append(os.path.abspath(theme_path))
 
         for page in self.config["pages"]:
             page_dirpath = os.path.dirname(page["file"])
             watch_dirs.append(os.path.abspath(page_dirpath))
 
-        server = papery.serving.Server(root_dir="output",
+        server = papery.serving.Server(root_dir=self.output_dir,
                                        watch_dirs=watch_dirs,
                                        change_handler=self.rebuild)
         server.run()
