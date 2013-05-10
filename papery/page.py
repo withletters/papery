@@ -61,7 +61,8 @@ class Page(object):
 
     def render(self,
                author='', title='',
-               url='', email='', keywords='', description=''):
+               url='', email='', keywords='', description='',
+               variables={}):
         try:
             with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
                 info = json.load(info_file)
@@ -75,7 +76,8 @@ class Page(object):
 
         post = Post(self.post_file_name)
 
-        render_vars = info
+        render_vars = variables
+        render_vars.update(info)
         render_vars.update({"post": post})
 
         if 'author' not in render_vars or len(render_vars['author']) == 0:

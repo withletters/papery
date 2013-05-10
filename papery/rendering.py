@@ -56,6 +56,9 @@ class Renderer(object):
         if "assets" not in self.config:
             self.config['assets'] = []
 
+        if "variables" not in self.config:
+            self.config['variables'] = {}
+
         self._targets = {}
         self._page_maps = []
 
@@ -202,7 +205,8 @@ class Renderer(object):
                                 url=self.config['url'],
                                 email=self.config['email'],
                                 keywords=self.config['keywords'],
-                                description=self.config['description'])
+                                description=self.config['description'],
+                                variables=self.config['variables'])
 
                 if text is not None:
                     with codecs.open(output_file_path, 'w', encoding="utf-8") as fp:
