@@ -41,7 +41,7 @@ class Post(object):
         fp = codecs.open(self.filepath, 'r', encoding="utf-8")
         text = fp.read()
         fp.close()
-        return markdown2.Markdown().convert(text)
+        return markdown2.Markdown(extras={"header-ids": True}).convert(text)
 
 
 class Page(object):
