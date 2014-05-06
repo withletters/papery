@@ -212,7 +212,9 @@ class Renderer(object):
                     with codecs.open(output_file_path, 'w', encoding="utf-8") as fp:
                         fp.write(text)
 
-            self._page_maps.append({'location': output_filename,
+            location = os.path.join(render_vars['path'], output_filename)
+
+            self._page_maps.append({'location': location,
                                     'modified': p.mtime})
 
     def _build_assets(self):
