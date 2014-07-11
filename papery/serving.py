@@ -105,7 +105,7 @@ class RebuildHandlerWrapper(object):
     def changed(self):
         """
         Returns if the contents of the monitored directories have changed since
-        the last call. It will return always return false on first run. 
+        the last call. It will return always return false on first run.
         """
         last_modtime_sum = self._modtime_sum
 
@@ -114,8 +114,9 @@ class RebuildHandlerWrapper(object):
         for d in self.watch_dirs:
             for root, dirs, files in os.walk(d):
                 for f in files:
-                    abspath = os.path.join(root, f)
-                    self._modtime_sum += os.stat(abspath).st_mtime
+                    if not f.startswith('.'):
+                        abspath = os.path.join(root, f)
+                        self._modtime_sum += os.stat(abspath).st_mtime
 
         if last_modtime_sum is None:
             # always return false on first run
