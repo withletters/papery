@@ -107,6 +107,10 @@ def find_package_data(where='.', package='',
                 out.setdefault(package, []).append(prefix+name)
     return out
 
+install_requires = ["jinja2", "markdown2"]
+if sys.version_info < (2, 7):
+    install_requires += ["argparse"]
+
 setup(
     name="papery",
     version=version,
@@ -116,7 +120,7 @@ setup(
     author="Xcoo, Inc.",
     author_email="developer@xcoo.jp",
     url="https://github.com/withletters/papery",
-    install_requires=["jinja2", "markdown2"],
+    install_requires=install_requires,
     packages=['papery'],
     package_data=find_package_data('papery',
                                    package='papery',
