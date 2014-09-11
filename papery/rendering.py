@@ -174,8 +174,9 @@ class Renderer(object):
             for dirpath, _, _ in os.walk(page_dirpath):
                 match = os.path.join(dirpath, page_basename)
                 for p in glob.glob(match):
-                    self._targets[p] = {'template': page['template'],
-                                        'path': page_output_dirpath}
+                    if os.path.dirname(p) == page_dirpath:
+                        self._targets[p] = {'template': page['template'],
+                                            'path': page_output_dirpath}
 
     def _render_pages(self):
         theme_path = os.path.join(self.themes_dir, self.config["theme"])
