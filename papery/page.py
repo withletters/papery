@@ -79,7 +79,7 @@ class Page(object):
 
         render_vars = variables
         info = self._build_info(info)
-        print(info)
+
         render_vars.update(info)
         render_vars.update({"post": post})
 
@@ -146,7 +146,7 @@ class Page(object):
 
         return max(mtimes)
 
-    file_re = re.compile("^file\((.+?)\)$")
+    md_re = re.compile("^md\((.+?)\)$")
 
     def _build_info(self, info):
 
@@ -165,15 +165,13 @@ class Page(object):
 
             return info
         elif type(info) is str or type(info) is unicode:
-            m = self.file_re.match(info)
+            m = self.md_re.match(info)
 
             if m is None:
                 return info
             else:
                 path = m.groups()[0]
                 path = os.path.join(os.path.dirname(self.info_file_name), path)
-
-                print(path)
 
                 post = Post(path)
                 return post
