@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 from __future__ import print_function, unicode_literals
 
+import re
 
 import jinja2
 from jinja2 import meta
@@ -77,6 +78,8 @@ class Page(object):
         post = Post(self.post_file_name)
 
         render_vars = variables
+        info = self._build_info(info)
+        print(info)
         render_vars.update(info)
         render_vars.update({"post": post})
 
@@ -143,6 +146,39 @@ class Page(object):
 
         return max(mtimes)
 
+    file_re = re.compile("^file\((.+?)\)$")
+
+    def _build_info(self, info):
+
+        if type(info) is dict:
+            for k in info:
+                info[k] = self._build_info(info[k])
+
+            return info
+        elif type(info) is list:
+            newval = []
+
+            for v in info:
+                newval.append(self._build_info(v))
+
+            info = newval
+
+            return info
+        elif type(info) is str or type(info) is unicode:
+            m = self.file_re.match(info)
+
+            if m is None:
+                return info
+            else:
+                path = m.groups()[0]
+                path = os.path.join(os.path.dirname(self.info_file_name), path)
+
+                print(path)
+
+                post = Post(path)
+                return post
+        else:
+            return info
 
 def linebreaksbr(arg):
     return arg.replace("\n", "<br />\n")
