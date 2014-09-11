@@ -35,14 +35,23 @@ class Post(object):
     def __init__(self, filepath):
         self.filepath = filepath
 
-    def text(self, lang=None):
+    def _build_link(self, text):
+        return re.sub("<a.*?href=\"(.+?)\".*?>(.+?)</a>",
+                      "<a href=\"\\1\" target=\"_blank\">\\2</a>",
+                      text)
+
+    def text(self, lang=None, link=None):
 
         # TODO(takashi) switch with language
 
         fp = codecs.open(self.filepath, 'r', encoding="utf-8")
         text = fp.read()
         fp.close()
-        return markdown2.Markdown(extras={"header-ids": True}).convert(text)
+
+        if link is None:
+            return markdown2.Markdown().convert(text)
+        else:
+            return self._build_link(markdown2.Markdown().convert(text))
 
 
 class Page(object):
