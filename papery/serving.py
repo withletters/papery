@@ -87,6 +87,13 @@ class RebuildHandlerWrapper(object):
         class RebuildHandler(SimpleHTTPRequestHandler):
             """Rebuild if something has changed."""
 
+            timeout = 30
+
+            def setup(self):
+                "Sets a timeout on the socket"
+                self.request.settimeout(self.timeout)
+                SimpleHTTPRequestHandler.setup(self)
+
             def handle(self):
                 """
                 Handle a request and, if anything has changed, rebuild the
