@@ -109,6 +109,26 @@ class RebuildHandlerWrapper(object):
 
         wrap_self.request_handler = RebuildHandler
 
+    def _sum_modified_time(self, scan_dirs):
+        t = 0
+
+        for d in scan_dirs:
+            for root, dirs, files in os.walk(d):
+                for f in files:
+                    if not f.startswith('.'):
+                        abspath = os.path.join(root, f)
+                        t += os.stat(abspath).st_mtime
+
+                sub_dirs = []
+                for sub_d in dirs:
+                    if not sub_d.startswith('.'):
+                        sub_dirs.append(os.path.join(root, sub_d))
+
+                if len(sub_dirs) > 0:
+                    t += self._sum_modified_time(sub_dirs)
+
+        return t
+
     def changed(self):
         """
         Returns if the contents of the monitored directories have changed since
@@ -117,13 +137,7 @@ class RebuildHandlerWrapper(object):
         last_modtime_sum = self._modtime_sum
 
         # calculate simple sum of file modification times
-        self._modtime_sum = 0
-        for d in self.watch_dirs:
-            for root, dirs, files in os.walk(d):
-                for f in files:
-                    if not f.startswith('.'):
-                        abspath = os.path.join(root, f)
-                        self._modtime_sum += os.stat(abspath).st_mtime
+        self._modtime_sum = self._sum_modified_time(self.watch_dirs)
 
         if last_modtime_sum is None:
             # always return false on first run

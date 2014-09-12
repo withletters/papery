@@ -69,6 +69,8 @@ class Page(object):
 
         self.template = self.template_env.get_template(self.template_name)
 
+        self.sub_file_names = self._scan_info()
+
     def render(self,
                author='', title='',
                url='', email='', keywords='', description='',
@@ -126,7 +128,13 @@ class Page(object):
         else:
             info_mtime = 0
 
-        return max([template_mtime, post_mtime, info_mtime])
+        mtimes = [template_mtime, post_mtime, info_mtime]
+
+        for f in self.sub_file_names:
+            if os.path.exists(f):
+                mtimes.append(os.path.getmtime(f))
+
+        return max(mtimes)
 
     def _template_mtime(self):
         mtimes = []
@@ -156,6 +164,41 @@ class Page(object):
         return max(mtimes)
 
     md_re = re.compile("^md\((.+?)\)$")
+
+    def _scan_info(self):
+        try:
+            with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
+                info = json.load(info_file)
+        except IOError:
+            info = {}
+        except ValueError as e:
+            print("JSON Parse error in %s" % self.info_file_name)
+            print(e.args[0])
+            info = {}
+
+        return self.__scan_info(info)
+
+    def __scan_info(self, info):
+        files = []
+
+        if type(info) is dict:
+            for k in info:
+                files.extend(self.__scan_info(info[k]))
+
+        elif type(info) is list:
+            for v in info:
+                files.extend(self.__scan_info(v))
+
+        elif type(info) is str or type(info) is unicode:
+            m = self.md_re.match(info)
+
+            if m is not None:
+                path = m.groups()[0]
+                path = os.path.join(os.path.dirname(self.info_file_name), path)
+
+                files.append(path)
+
+        return files
 
     def _build_info(self, info):
 
