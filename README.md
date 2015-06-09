@@ -1,4 +1,4 @@
-Papery version 0.1.9
+Papery version 0.1.10
 
 # Papery
 

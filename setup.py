@@ -72,8 +72,7 @@ def find_package_data(where='.', package='',
             if os.path.isdir(fn):
                 bad_name = False
                 for pattern in exclude_directories:
-                    if (fnmatchcase(name, pattern)
-                        or fn.lower() == pattern.lower()):
+                    if (fnmatchcase(name, pattern) or fn.lower() == pattern.lower()):
                         bad_name = True
                         if show_ignored:
                             print >> sys.stderr, (
@@ -94,8 +93,7 @@ def find_package_data(where='.', package='',
                 # is a file
                 bad_name = False
                 for pattern in exclude:
-                    if (fnmatchcase(name, pattern)
-                        or fn.lower() == pattern.lower()):
+                    if (fnmatchcase(name, pattern) or fn.lower() == pattern.lower()):
                         bad_name = True
                         if show_ignored:
                             print >> sys.stderr, (
@@ -110,7 +108,7 @@ def find_package_data(where='.', package='',
 setup(
     name="papery",
     version=version,
-    description="A simple, static site generator - supports Markdown/JSON input and Jinja2 templating.",
+    description="A simple static site generator - supports Markdown/JSON inputs and Jinja2 templating",
     long_description=__doc__,
     license="Apache License 2.0",
     author="Xcoo, Inc.",
