@@ -51,8 +51,9 @@ class Sitemap(object):
         with codecs.open(path, 'w', encoding="utf-8") as fp:
             fp.write(content)
 
-        with gzip.open(path + '.gz', 'wb') as gzfp:
-            gzfp.write(content.encode('utf-8'))
+        gzfp = gzip.open(path + '.gz', 'wb')
+        gzfp.write(content.encode('utf-8'))
+        gzfp.close()
 
     @property
     def content(self):
