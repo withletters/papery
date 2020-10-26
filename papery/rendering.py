@@ -184,7 +184,10 @@ class Renderer(object):
 
         for page, render_vars in self._targets.items():
             page_base, _ = os.path.splitext(page)
-            info = page_base + ".json"
+            if os.path.exists(page_base + ".yaml"):
+              info = page_base + ".yaml"
+            else:
+              info = page_base + ".json"
             page_name = os.path.basename(page_base)
             p = Page(template_dir=theme_templates_path,
                      template_name=render_vars['template'],

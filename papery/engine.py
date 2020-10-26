@@ -22,6 +22,7 @@ from papery import version
 from papery.papery import Papery
 
 import json
+import yaml
 import os
 import sys
 import argparse
@@ -69,16 +70,25 @@ class Engine(object):
         try:
             config_path = ''
 
-            if os.path.exists('config.json'):
-                config_path = 'config.json'
-            elif os.path.exists('.config.json'):
-                config_path = '.config.json'
+            if os.path.exists('config.yaml') or os.path.exists('.config.yaml'):
+                if os.path.exists('config.yaml'):
+                  config_path = 'config.yaml'
+                elif os.path.exists('.config.yaml'):
+                    config_path = '.config.yaml'
+                with open(config_path) as config_file:
+                    config = yaml.safe_load(config_file)
+                    self.site = Papery(config)
+            else:
+                if os.path.exists('config.json'):
+                    config_path = 'config.json'
+                elif os.path.exists('.config.json'):
+                    config_path = '.config.json'
 
-            with open(config_path) as config_file:
-                config = json.load(config_file)
-                self.site = Papery(config)
+                with open(config_path) as config_file:
+                    config = json.load(config_file)
+                    self.site = Papery(config)
         except IOError:
-            print('Not found \"config.json\". Papery run with default configuration.',
+            print('Not found \"config.json\" or \"config.yaml\". Papery run with default configuration.',
                   file=sys.stderr)
             self.site = Papery()
 
