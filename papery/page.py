@@ -179,7 +179,6 @@ class Page(object):
     md_re = re.compile("^md\((.+?)\)$")
 
     def _scan_info(self):
-
         if self.info_file_name.endswith('.yaml'):
             try:
                 with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
