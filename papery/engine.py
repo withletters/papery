@@ -75,6 +75,7 @@ class Engine(object):
                   config_path = 'config.yaml'
                 elif os.path.exists('.config.yaml'):
                     config_path = '.config.yaml'
+
                 with open(config_path) as config_file:
                     config = yaml.safe_load(config_file)
                     self.site = Papery(config)
