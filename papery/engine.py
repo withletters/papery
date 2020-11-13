@@ -72,7 +72,7 @@ class Engine(object):
 
             if os.path.exists('config.yaml') or os.path.exists('.config.yaml'):
                 if os.path.exists('config.yaml'):
-                  config_path = 'config.yaml'
+                    config_path = 'config.yaml'
                 elif os.path.exists('.config.yaml'):
                     config_path = '.config.yaml'
 
