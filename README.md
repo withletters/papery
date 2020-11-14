@@ -1,5 +1,3 @@
-Papery version 0.1.10
-
 # Papery
 
 papery is  is a simple, static site generator written in Python - supports Markdown, YAML, and JSON input and Jinja2 templating.
