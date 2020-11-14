@@ -2,14 +2,12 @@
 
 # Papery
 
-papery is  is a simple, static site generator written in Python - supports Markdown, YAML, and JSON input and Jinja2 templating.
+Static site generator with Jinja2 templates and structured content in Markdown, YAML, and JSON
 
 # Features
 
-- Markdown and JSON as input.
-- Jinja2 templating.
-- Python 2 and 3 compatible.
-- Embed development web server (automatic updating)
+- Describe content with Markdown, YAML, and JSON
+- Jinja2 templating
 
 # Requirements
 
@@ -20,43 +18,48 @@ papery is  is a simple, static site generator written in Python - supports Markd
 # Installation
 
 papery is available on [pypi](https://pypi.python.org/pypi).
-To get the latest released version:
 
-    pip install papery
+```console
+pip install papery
+```
 
 # Usage
 
-## Creating new site
+## Creating a new site
 
 Run the following command
 
-    cd path/to/your_site
-    papery init
+```console
+cd path/to/your_site/directory
+papery init
+```
 
-## Run with development server
+## Run with the development server
 
-    papery run
+```console
+papery run
+```
 
-access to <http://localhost:8000> with your web browser.
-
-All pages are automatically updated when you modified any resources.
+You can see your web site via <http://localhost:8000>. All pages are automatically updated when you modified any resources.
 
 ## Build manually
 
-    papery build
+```console
+papery build
+```
 
 # TODO
 
 - documentation
-- validate Markdown/JSON/YAML syntax
+- validate Markdown, JSON, and YAML syntax
 - code syntax highlight
-- create new pages via papery sub command
+- styling with SASS/SCSS
 
 # License
 
-Copyright 2013-2017 [Xcoo, Inc.][xcoo]
+Copyright 2013-2020 [Xcoo, Inc.][xcoo]
 
 Licensed under the [Apache License, Version 2.0][apache-license-2.0].
 
-[xcoo]: https://xcoo.jp
+[xcoo]: https://xcoo.com
 [apache-license-2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
