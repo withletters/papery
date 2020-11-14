@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/papery.svg)](https://badge.fury.io/py/papery)
+
 # Papery
 
 papery is  is a simple, static site generator written in Python - supports Markdown, YAML, and JSON input and Jinja2 templating.
