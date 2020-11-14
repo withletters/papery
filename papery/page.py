@@ -25,6 +25,7 @@ from jinja2 import meta
 
 import markdown2
 import json
+import yaml
 import codecs
 
 import os
@@ -75,16 +76,28 @@ class Page(object):
                author='', title='',
                url='', email='', keywords='', description='',
                variables={}):
-        try:
-            with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
-                info = json.load(info_file)
-        except IOError:
-            print("Not found info file %s" % self.info_file_name)
-            info = {}
-        except ValueError as e:
-            print("JSON Parse error in %s" % self.info_file_name)
-            print(e.args[0])
-            return None
+        if self.info_file_name.endswith('.yaml'):
+            try:
+                with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
+                    info = yaml.safe_load(info_file)
+            except IOError:
+                print("Not found info file %s" % self.info_file_name)
+                info = {}
+            except ValueError as e:
+                print("YAML Parse error in %s" % self.info_file_name)
+                print(e.args[0])
+                return None
+        else:
+            try:
+                with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
+                    info = json.load(info_file)
+            except IOError:
+                print("Not found info file %s" % self.info_file_name)
+                info = {}
+            except ValueError as e:
+                print("JSON Parse error in %s" % self.info_file_name)
+                print(e.args[0])
+                return None
 
         post = Post(self.post_file_name)
 
@@ -166,15 +179,26 @@ class Page(object):
     md_re = re.compile("^md\((.+?)\)$")
 
     def _scan_info(self):
-        try:
-            with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
-                info = json.load(info_file)
-        except IOError:
-            info = {}
-        except ValueError as e:
-            print("JSON Parse error in %s" % self.info_file_name)
-            print(e.args[0])
-            info = {}
+        if self.info_file_name.endswith('.yaml'):
+            try:
+                with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
+                    info = yaml.safe_load(info_file)
+            except IOError:
+                info = {}
+            except ValueError as e:
+                print("YAML Parse error in %s" % self.info_file_name)
+                print(e.args[0])
+                info = {}
+        else:
+            try:
+                with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
+                    info = json.load(info_file)
+            except IOError:
+                info = {}
+            except ValueError as e:
+                print("JSON Parse error in %s" % self.info_file_name)
+                print(e.args[0])
+                info = {}
 
         return self.__scan_info(info)
 

@@ -2,7 +2,7 @@ Papery version 0.1.10
 
 # Papery
 
-papery is  is a simple, static site generator written in Python - supports Markdown/JSON input and Jinja2 templating.
+papery is  is a simple, static site generator written in Python - supports Markdown, YAML, and JSON input and Jinja2 templating.
 
 # Features
 
@@ -15,6 +15,7 @@ papery is  is a simple, static site generator written in Python - supports Markd
 
 - [Jinja2](http://jinja.pocoo.org/)
 - [markdown2](https://github.com/trentm/python-markdown2)
+- [pyyaml](https://pypi.org/project/PyYAML/)
 
 # Installation
 
@@ -47,7 +48,7 @@ All pages are automatically updated when you modified any resources.
 # TODO
 
 - documentation
-- validate Markdown/JSON syntax
+- validate Markdown/JSON/YAML syntax
 - code syntax highlight
 - create new pages via papery sub command
 

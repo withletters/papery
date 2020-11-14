@@ -114,7 +114,7 @@ setup(
     author="Xcoo, Inc.",
     author_email="developer@xcoo.jp",
     url="https://github.com/withletters/papery",
-    install_requires=["jinja2", "markdown2"],
+    install_requires=["jinja2", "markdown2", "pyyaml"],
     packages=['papery'],
     package_data=find_package_data('papery',
                                    package='papery',
