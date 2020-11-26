@@ -26,7 +26,7 @@ import yaml
 import os
 import sys
 import argparse
-#import logging
+# import logging
 
 
 class Engine(object):
@@ -62,6 +62,13 @@ class Engine(object):
                                              help='clear all')
 
         parser_clean.add_argument('--debug',
+                                  type=int,
+                                  help='output debug log')
+
+        parser_check = subparsers.add_parser('check',
+                                             help='validation')
+
+        parser_check.add_argument('--debug',
                                   type=int,
                                   help='output debug log')
 
@@ -101,3 +108,5 @@ class Engine(object):
             self.site.initialize(**args.__dict__)
         elif args.command == 'clean':
             self.site.clean(**args.__dict__)
+        elif args.command == 'check':
+            self.site.check(**args.__dict__)

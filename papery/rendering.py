@@ -24,6 +24,7 @@ import glob
 import codecs
 import shutil
 import filecmp
+import subprocess
 
 try:
     from urlparse import urljoin
@@ -66,6 +67,7 @@ class Renderer(object):
         self._check()
         self._prepare_output()
         self._scan()
+        self._validate()
         self._render_pages()
         self._copy_assets()
         self._generate_sitemap()
@@ -74,6 +76,9 @@ class Renderer(object):
         self._check()
         self._scan()
         self._remove_output()
+
+    def validate(self):
+        self._validate()
 
     def _remove_output(self):
         for page, render_vars in self._targets.items():
@@ -269,3 +274,13 @@ class Renderer(object):
         sitemap = Sitemap(self._page_maps)
         path = os.path.join(self.output_dir, 'sitemap.xml')
         sitemap.save(path)
+
+    def _validate(self):
+        os.system('yamllint .')
+
+        cmd = 'yamllint .'
+        process = (subprocess.Popen(cmd,
+                                    stdout=subprocess.PIPE,
+                                    shell=True).communicate()[0]).decode('utf-8')
+        if 'syntax error' in process:
+            sys.exit()

@@ -254,5 +254,6 @@ class Page(object):
         else:
             return info
 
+
 def linebreaksbr(arg):
     return arg.replace("\n", "<br />\n")
