@@ -78,6 +78,7 @@ class Renderer(object):
         self._remove_output()
 
     def validate(self):
+        self._scan()
         self._validate()
 
     def _remove_output(self):
@@ -276,11 +277,50 @@ class Renderer(object):
         sitemap.save(path)
 
     def _validate(self):
-        os.system('yamllint .')
 
+        # yamllint
         cmd = 'yamllint .'
-        process = (subprocess.Popen(cmd,
-                                    stdout=subprocess.PIPE,
-                                    shell=True).communicate()[0]).decode('utf-8')
-        if 'syntax error' in process:
+        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        popen.wait()
+        yamlresult = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8')
+        files = yamlresult.split("\n")
+        for file in files:
+            if './' in file:
+                filepass = file
+            elif '' != file:
+                print(filepass.lstrip('./') + ':' + file
+                      .lstrip(' ').replace('  ', '')
+                      .replace('error', ' \033[31merror\033[0m ')
+                      .replace('\033[31merror\033[0m :', 'error:')
+                      .replace('warning', ' warning '))
+
+        # jsonlint
+        for page, render_vars in self._targets.items():
+            page_base, _ = os.path.splitext(page)
+            if os.path.exists(page_base + ".json"):
+                info = page_base + ".json"
+                print(info)
+                jsoncmd = 'jsonlint ' + info + ' -q -c'
+                popen = subprocess.Popen(jsoncmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                popen.wait()
+                jsonresult = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8')
+                if jsonresult != '':
+                    print(jsonresult.replace('\n', '').replace(' line ', '').replace(', col ', ':'))
+
+        cmd = 'jsonlint config.json -q -c'
+        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        popen.wait()
+        result = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8')
+        if result != '':
+            print(result.replace('\n', '').replace(' line ', '').replace(', col ', ':'))
+
+        # markdownlint
+        cmd = 'markdownlint .'
+        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        popen.wait()
+        result = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8')
+        if result != '':
+            print(result)
+
+        if 'syntax error' in yamlresult:
             sys.exit()
