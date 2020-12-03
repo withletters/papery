@@ -34,6 +34,7 @@ except ImportError:
 from papery.page import Page
 from papery.sitemap import Sitemap
 from papery.util import weak_tree_copy
+from papery.validate import Validator
 
 
 class Renderer(object):
@@ -65,9 +66,9 @@ class Renderer(object):
 
     def run(self):
         self._check()
+        self._validate()
         self._prepare_output()
         self._scan()
-        self._validate()
         self._render_pages()
         self._copy_assets()
         self._generate_sitemap()
@@ -78,7 +79,6 @@ class Renderer(object):
         self._remove_output()
 
     def validate(self):
-        self._scan()
         self._validate()
 
     def _remove_output(self):
@@ -277,50 +277,18 @@ class Renderer(object):
         sitemap.save(path)
 
     def _validate(self):
+        exitflg = False
 
-        # yamllint
-        cmd = 'yamllint .'
-        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        popen.wait()
-        yamlresult = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8')
-        files = yamlresult.split("\n")
-        for file in files:
-            if './' in file:
-                filepass = file
-            elif '' != file:
-                print(filepass.lstrip('./') + ':' + file
-                      .lstrip(' ').replace('  ', '')
-                      .replace('error', ' \033[31merror\033[0m ')
-                      .replace('\033[31merror\033[0m :', 'error:')
-                      .replace('warning', ' warning '))
+        file_list = []
+        for page in self.config["pages"]:
+            page_dirpath = os.path.dirname(page["file"])
+            for (root, dirs, files) in os.walk(page_dirpath):
+                for file in files:
+                    file_list.append(os.path.join(root, file).replace("\\", "/"))
 
-        # jsonlint
-        for page, render_vars in self._targets.items():
-            page_base, _ = os.path.splitext(page)
-            if os.path.exists(page_base + ".json"):
-                info = page_base + ".json"
-                print(info)
-                jsoncmd = 'jsonlint ' + info + ' -q -c'
-                popen = subprocess.Popen(jsoncmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                popen.wait()
-                jsonresult = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8')
-                if jsonresult != '':
-                    print(jsonresult.replace('\n', '').replace(' line ', '').replace(', col ', ':'))
+        exitflg = exitflg or Validator._yamllint(file_list)
+        exitflg = exitflg or Validator._jsonlint(file_list)
+        exitflg = exitflg or Validator._mdlint(file_list)
 
-        cmd = 'jsonlint config.json -q -c'
-        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        popen.wait()
-        result = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8')
-        if result != '':
-            print(result.replace('\n', '').replace(' line ', '').replace(', col ', ':'))
-
-        # markdownlint
-        cmd = 'markdownlint .'
-        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        popen.wait()
-        result = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8')
-        if result != '':
-            print(result)
-
-        if 'syntax error' in yamlresult:
+        if exitflg:
             sys.exit()
