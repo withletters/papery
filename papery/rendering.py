@@ -24,7 +24,6 @@ import glob
 import codecs
 import shutil
 import filecmp
-import subprocess
 
 try:
     from urlparse import urljoin
@@ -277,6 +276,16 @@ class Renderer(object):
         sitemap.save(path)
 
     def _validate(self):
+
+        if os.path.exists('config.yaml'):
+            Validator.validate_config('config.yaml')
+        if os.path.exists('.config.yaml'):
+            Validator.validate_config('.config.yaml')
+        if os.path.exists('config.json'):
+            Validator.validate_config('config.json')
+        if os.path.exists('.config.json'):
+            Validator.validate_config('.config.json')
+
         exitflg = False
 
         file_list = []
@@ -286,9 +295,9 @@ class Renderer(object):
                 for file in files:
                     file_list.append(os.path.join(root, file).replace("\\", "/"))
 
-        exitflg = exitflg or Validator._yamllint(file_list)
-        exitflg = exitflg or Validator._jsonlint(file_list)
-        exitflg = exitflg or Validator._mdlint(file_list)
+        exitflg = exitflg or Validator.yamllint(file_list)
+        exitflg = exitflg or Validator.jsonlint(file_list)
+        exitflg = exitflg or Validator.mdlint(file_list)
 
         if exitflg:
             sys.exit()

@@ -85,7 +85,7 @@ class Engine(object):
                     config_path = '.config.yaml'
 
                 with open(config_path) as config_file:
-                    Validator._validate_config(config_path)
+                    Validator.validate_config(config_path)
                     config = yaml.safe_load(config_file)
                     self.site = Papery(config)
             else:
@@ -95,7 +95,7 @@ class Engine(object):
                     config_path = '.config.json'
 
                 with open(config_path) as config_file:
-                    Validator._validate_config(config_path)
+                    Validator.validate_config(config_path)
                     config = json.load(config_file)
                     self.site = Papery(config)
         except IOError:

@@ -23,7 +23,10 @@ import subprocess
 
 
 class Validator(object):
-    def _validate_config(config_path):
+    # def __init__(self):
+    #     self = self
+
+    def validate_config(config_path):
         exitflg = False
 
         if '.yaml' in config_path:
@@ -40,6 +43,7 @@ class Validator(object):
 
         elif '.json' in config_path:
             cmd = 'jsonlint ' + config_path + ' -q -c'
+            # results = self._cmdexe(self, cmd)
             popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             popen.wait()
             results = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8').splitlines()
@@ -50,7 +54,7 @@ class Validator(object):
         if exitflg:
             sys.exit()
 
-    def _yamllint(file_list):
+    def yamllint(file_list):
         # yamllist = [f for f in file_list if '.yaml' in file_list]
         exitflg = False
         cmd = 'yamllint .'
@@ -71,7 +75,7 @@ class Validator(object):
                     print(res)
         return exitflg
 
-    def _jsonlint(file_list):
+    def jsonlint(file_list):
         jsonlist = [f for f in file_list if '.json' in f]
         exitflg = False
         for page in jsonlist:
@@ -84,7 +88,7 @@ class Validator(object):
                 exitflg = True
         return exitflg
 
-    def _mdlint(file_list):
+    def mdlint(file_list):
         # mdlist = [f for f in file_list if '.md' in file_list]
         exitflg = False
         cmd = 'markdownlint .'
@@ -95,3 +99,9 @@ class Validator(object):
             if 'MD013' not in result:
                 print(result)
         return exitflg
+
+    def _execmd(self, cmd):
+        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        popen.wait()
+        results = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8').splitlines()
+        return results
