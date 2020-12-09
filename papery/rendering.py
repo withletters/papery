@@ -278,13 +278,13 @@ class Renderer(object):
     def _validate(self):
 
         if os.path.exists('config.yaml'):
-            Validator.validate_config('config.yaml')
-        if os.path.exists('.config.yaml'):
-            Validator.validate_config('.config.yaml')
-        if os.path.exists('config.json'):
-            Validator.validate_config('config.json')
-        if os.path.exists('.config.json'):
-            Validator.validate_config('.config.json')
+            config_file = 'config.yaml'
+        elif os.path.exists('.config.yaml'):
+            config_file = '.config.yaml'
+        elif os.path.exists('config.json'):
+            config_file = 'config.json'
+        elif os.path.exists('.config.json'):
+            config_file = '.config.json'
 
         exitflg = False
 
@@ -294,10 +294,13 @@ class Renderer(object):
             for (root, dirs, files) in os.walk(page_dirpath):
                 for file in files:
                     file_list.append(os.path.join(root, file).replace("\\", "/"))
+        file_list.append('readme.md')
 
-        exitflg = exitflg or Validator.yamllint(file_list)
-        exitflg = exitflg or Validator.jsonlint(file_list)
-        exitflg = exitflg or Validator.mdlint(file_list)
+        validator = Validator()
+        exitflg = True if validator.validate_config(config_file) else exitflg
+        exitflg = True if validator.yamllint(file_list) else exitflg
+        exitflg = True if validator.jsonlint(file_list) else exitflg
+        exitflg = True if validator.mdlint(file_list) else exitflg
 
         if exitflg:
             sys.exit()

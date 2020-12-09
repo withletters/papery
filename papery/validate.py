@@ -23,85 +23,104 @@ import subprocess
 
 
 class Validator(object):
-    # def __init__(self):
-    #     self = self
 
-    def validate_config(config_path):
+    def __init__(self):
+        pass
+
+    def validate_config(self, config_path):
         exitflg = False
-
         if '.yaml' in config_path:
-            cmd = 'pykwalify -d ' + config_path + ' -s config_schema.yaml'
-            popen = subprocess.Popen(
-                cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            popen.wait()
-            results = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8').splitlines()
-            # results = (popen.communicate()[1]).decode('utf-8').splitlines()
-            for result in results:
-                if result.startswith(' - '):
-                    print('\033[31m' + 'config.yaml: ' + result + '\033[0m')
-                    exitflg = True
-
+            if self._exists_cmd('yamllint'):
+                exitflg = True if self._yamllint(config_path) else exitflg
+            if self._exists_cmd('pykwalify'):
+                exitflg = True if self._pykwalify(config_path, 'config_schema.yaml') else exitflg
         elif '.json' in config_path:
-            cmd = 'jsonlint ' + config_path + ' -q -c'
-            # results = self._cmdexe(self, cmd)
-            popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            popen.wait()
-            results = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8').splitlines()
-            for result in results:
-                if result != '':
-                    print(result.replace(' line ', '').replace(', col ', ':'))
-
+            if self._exists_cmd('jsonlint'):
+                exitflg = self._jsonlint(config_path)
         if exitflg:
             sys.exit()
 
-    def yamllint(file_list):
-        # yamllist = [f for f in file_list if '.yaml' in file_list]
+    def yamllint(self, file_list):
         exitflg = False
-        cmd = 'yamllint .'
-        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        popen.wait()
-        results = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8').splitlines()
-        for result in results:
-            if './' in result:
-                filepass = result
-            elif '' != result:
-                res = filepass.lstrip('./') + ':' + result
-                while '  ' in res:
-                    res = res.replace('  ', ' ')
-                if 'error' in res:
-                    print('\033[31m' + res + '\033[0m')
-                    exitflg = True
-                else:
-                    print(res)
+        if self._exists_cmd('yamllint'):
+            pagelist = [f for f in file_list if '.yaml' in f]
+            for page in pagelist:
+                exitflg = True if self._yamllint(page) else exitflg
         return exitflg
 
-    def jsonlint(file_list):
-        jsonlist = [f for f in file_list if '.json' in f]
+    def jsonlint(self, file_list):
         exitflg = False
-        for page in jsonlist:
-            jsoncmd = 'jsonlint ' + page + ' -q -c'
-            popen = subprocess.Popen(jsoncmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            popen.wait()
-            jsonresult = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8')
-            if jsonresult != '':
-                print('\033[31m' + jsonresult.replace('\n', '').replace(' line ', '').replace(', col ', ':') + '\033[0m')
+        if self._exists_cmd('jsonlint'):
+            pagelist = [f for f in file_list if '.json' in f]
+            for page in pagelist:
+                exitflg = True if self._jsonlint(page) else exitflg
+        return exitflg
+
+    def mdlint(self, file_list):
+        exitflg = False
+        if self._exists_cmd('markdownlint'):
+            pagelist = [f for f in file_list if '.md' in f]
+            for page in pagelist:
+                exitflg = True if self._markdownlint(page) else exitflg
+        return exitflg
+
+    def _exists_cmd(self, cmd):
+        results = self._execmd(cmd + ' --version')[0]
+        if results:
+            return True
+        else:
+            print('command not found: ' + cmd)
+            return False
+
+    def _pykwalify(self, file_path, schema_path):
+        exitflg = False
+        cmd = 'pykwalify -d ' + file_path + ' -s ' + schema_path
+        results = sum(self._execmd(cmd), [])
+        for result in results:
+            if result.startswith(' - '):
+                print('\033[31m' + 'config.yaml: ' + result + '\033[0m')
                 exitflg = True
         return exitflg
 
-    def mdlint(file_list):
-        # mdlist = [f for f in file_list if '.md' in file_list]
+    def _yamllint(self, page):
         exitflg = False
-        cmd = 'markdownlint .'
-        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        popen.wait()
-        results = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8').splitlines()
+        results = self._execmd('yamllint ' + page)[0]
+        for result in results:
+            if not result.startswith(' '):
+                filepass = result
+            elif '' != result:
+                res = filepass.lstrip('./') + ':' + result.lstrip(' ')
+                while '  ' in res:
+                    res = res.replace('  ', ' ')
+                if 'error' in res and not 'line-length' in res:
+                    print('\033[31m' + res + '\033[0m')
+                    exitflg = True
+                elif not 'line-length' in res:
+                    print(res)
+        return exitflg
+
+    def _jsonlint(self, page):
+        exitflg = False
+        results = self._execmd('jsonlint ' + page + ' -q -c')[1]
+        for result in results:
+            print('\033[31m' + result.replace(' line ', '').replace(', col ', ':') + '\033[0m')
+            exitflg = True
+        return exitflg
+
+    def _markdownlint(self, page):
+        exitflg = False
+        results = self._execmd('markdownlint ' + page)[1]
         for result in results:
             if 'MD013' not in result:
                 print(result)
         return exitflg
 
     def _execmd(self, cmd):
-        popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        popen.wait()
-        results = (popen.communicate()[0] + popen.communicate()[1]).decode('utf-8').splitlines()
+        try:
+            popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            popen.wait()
+            results = [popen.communicate()[0].decode('utf-8').splitlines(),
+                       popen.communicate()[1].decode('utf-8').splitlines()]
+        except FileNotFoundError as e:
+            results = [[], [str(e.args)]]
         return results
