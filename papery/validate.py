@@ -92,11 +92,12 @@ class Validator(object):
                 res = filepass.lstrip('./') + ':' + result.lstrip(' ')
                 while '  ' in res:
                     res = res.replace('  ', ' ')
-                if 'error' in res and not 'line-length' in res:
-                    print('\033[31m' + res + '\033[0m')
-                    exitflg = True
-                elif not 'line-length' in res:
-                    print(res)
+                if 'line-length' not in res:
+                    if 'error' in res:
+                        print('\033[31m' + res + '\033[0m')
+                        exitflg = True
+                    else:
+                        print(res)
         return exitflg
 
     def _jsonlint(self, page):
@@ -110,8 +111,17 @@ class Validator(object):
     def _markdownlint(self, page):
         exitflg = False
         results = self._execmd('markdownlint ' + page)[1]
+        # ignore_rules = ['MD001', 'MD013', 'MD014', 'MD024', 'MD033', 'MD036', 'MD041', 'MD043', 'MD044']
         for result in results:
-            if 'MD013' not in result:
+            if 'MD001' not in result \
+           and 'MD013' not in result \
+           and 'MD014' not in result \
+           and 'MD024' not in result \
+           and 'MD033' not in result \
+           and 'MD036' not in result \
+           and 'MD041' not in result \
+           and 'MD043' not in result \
+           and 'MD044' not in result:
                 print(result)
         return exitflg
 

@@ -24,6 +24,7 @@ import glob
 import codecs
 import shutil
 import filecmp
+import pprint
 
 try:
     from urlparse import urljoin
@@ -276,6 +277,8 @@ class Renderer(object):
         sitemap.save(path)
 
     def _validate(self):
+        exitflg = False
+        validator = Validator()
 
         if os.path.exists('config.yaml'):
             config_file = 'config.yaml'
@@ -286,18 +289,23 @@ class Renderer(object):
         elif os.path.exists('.config.json'):
             config_file = '.config.json'
 
-        exitflg = False
+        exitflg = True if validator.validate_config(config_file) else exitflg
 
         file_list = []
+        page_list = []
         for page in self.config["pages"]:
             page_dirpath = os.path.dirname(page["file"])
+            page_list.append(page_dirpath)
+        page_list = list(set(page_list))
+
+        for page_dirpath in page_list:
             for (root, dirs, files) in os.walk(page_dirpath):
                 for file in files:
                     file_list.append(os.path.join(root, file).replace("\\", "/"))
         file_list.append('readme.md')
+        file_list = list(set(file_list))
+        file_list.sort()
 
-        validator = Validator()
-        exitflg = True if validator.validate_config(config_file) else exitflg
         exitflg = True if validator.yamllint(file_list) else exitflg
         exitflg = True if validator.jsonlint(file_list) else exitflg
         exitflg = True if validator.mdlint(file_list) else exitflg
