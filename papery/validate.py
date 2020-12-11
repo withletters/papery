@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 from __future__ import print_function, unicode_literals
 
+import os
 import sys
 import subprocess
 
@@ -33,7 +34,7 @@ class Validator(object):
             if self._exists_cmd('yamllint'):
                 exitflg = True if self._yamllint(config_path) else exitflg
             if self._exists_cmd('pykwalify'):
-                exitflg = True if self._pykwalify(config_path, 'config_schema.yaml') else exitflg
+                exitflg = True if self._pykwalify(config_path) else exitflg
         elif '.json' in config_path:
             if self._exists_cmd('jsonlint'):
                 exitflg = self._jsonlint(config_path)
@@ -72,8 +73,9 @@ class Validator(object):
             print('command not found: ' + cmd)
             return False
 
-    def _pykwalify(self, file_path, schema_path):
+    def _pykwalify(self, file_path):
         exitflg = False
+        schema_path = os.path.join(os.path.dirname(__file__), 'config_schema.yaml')
         cmd = 'pykwalify -d ' + file_path + ' -s ' + schema_path
         results = sum(self._execmd(cmd), [])
         for result in results:

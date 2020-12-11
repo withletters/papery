@@ -14,6 +14,10 @@ Static site generator with Jinja2 templates and structured content in Markdown, 
 - [Jinja2](http://jinja.pocoo.org/)
 - [markdown2](https://github.com/trentm/python-markdown2)
 - [pyyaml](https://pypi.org/project/PyYAML/)
+- [yamllint](https://github.com/adrienverge/yamllint)
+- [jsonlint](https://github.com/zaach/jsonlint)
+- [markdownlint](https://github.com/DavidAnson/markdownlint)
+- [pykwalify](https://github.com/Grokzen/pykwalify)
 
 # Installation
 
