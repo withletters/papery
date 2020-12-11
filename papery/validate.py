@@ -111,17 +111,16 @@ class Validator(object):
     def _markdownlint(self, page):
         exitflg = False
         results = self._execmd('markdownlint ' + page)[1]
-        # ignore_rules = ['MD001', 'MD013', 'MD014', 'MD024', 'MD033', 'MD036', 'MD041', 'MD043', 'MD044']
         for result in results:
-            if 'MD001' not in result \
-           and 'MD013' not in result \
-           and 'MD014' not in result \
-           and 'MD024' not in result \
-           and 'MD033' not in result \
-           and 'MD036' not in result \
-           and 'MD041' not in result \
-           and 'MD043' not in result \
-           and 'MD044' not in result:
+            if 'MD001/heading-increment/header-increment' not in result \
+           and 'MD013/line-length' not in result \
+           and 'MD014/commands-show-output' not in result \
+           and 'MD024/no-duplicate-header' not in result \
+           and 'MD033/no-inline-html' not in result \
+           and 'MD036/no-emphasis-as-heading/no-emphasis-as-header' not in result \
+           and 'MD041/first-line-heading/first-line-h1' not in result \
+           and 'MD043/required-headers' not in result \
+           and 'MD044/proper-names' not in result:
                 print(result)
         return exitflg
 
