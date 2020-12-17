@@ -130,8 +130,9 @@ class Validator(object):
         try:
             popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             popen.wait()
-            results = [popen.communicate()[0].decode('utf-8').splitlines(),
-                       popen.communicate()[1].decode('utf-8').splitlines()]
+            cmd_result = popen.communicate()
+            results = [cmd_result[0].decode('utf-8').splitlines(),
+                       cmd_result[1].decode('utf-8').splitlines()]
         except FileNotFoundError as e:
             results = [[], [str(e.args)]]
         return results
