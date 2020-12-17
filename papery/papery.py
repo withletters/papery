@@ -37,15 +37,18 @@ class Papery(object):
             self.output_dir = c['output'] if 'output' in c else 'output'
             self.themes_dir = c['themes'] if 'themes' in c else 'themes'
             self.files_dir = c['files'] if 'files' in c else 'files'
+            self.favicon_dir = c['favicon'] if 'favicon' in c else ''
         else:
             self.output_dir = 'output'
             self.themes_dir = 'themes'
             self.files_dir = 'files'
+            self.favicon_dir = ''
 
     def render(self, **args):
         renderer = papery.rendering.Renderer(self.config,
                                              self.themes_dir,
                                              self.files_dir,
+                                             self.favicon_dir,
                                              self.output_dir)
         renderer.run()
 
@@ -73,6 +76,7 @@ class Papery(object):
         renderer = papery.rendering.Renderer(self.config,
                                              self.themes_dir,
                                              self.files_dir,
+                                             self.favicon_dir,
                                              self.output_dir)
         renderer.clean()
 
