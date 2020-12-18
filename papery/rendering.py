@@ -56,6 +56,12 @@ class Renderer(object):
         if "assets" not in self.config:
             self.config['assets'] = []
 
+        if "themes_assets" not in self.config:
+            self.config['themes_assets'] = "assets"
+
+        if "files_assets" not in self.config:
+            self.config['files_assets'] = "assets"
+
         if "variables" not in self.config:
             self.config['variables'] = {}
 
@@ -114,7 +120,7 @@ class Renderer(object):
     def _check(self):
         theme_path = os.path.join(self.themes_dir, self.config["theme"])
         theme_templates_path = os.path.join(theme_path, "templates")
-        theme_assets_path = os.path.join(theme_path, "assets")
+        theme_assets_path = os.path.join(theme_path, self.config["themes_assets"])
 
         if not os.path.isdir(theme_path):
             # logging.critical("Not found theme directory %s. Aborting.")
@@ -129,7 +135,7 @@ class Renderer(object):
 
         if not os.path.isdir(theme_assets_path):
             print("Not found theme assets directory %s. Aborting." %
-                  theme_templates_path)
+                  theme_assets_path)
             sys.exit(1)
 
         for page in self.config["pages"]:
@@ -227,9 +233,9 @@ class Renderer(object):
 
     def _copy_assets(self):
         theme_path = os.path.join(self.themes_dir, self.config["theme"])
-        theme_assets_path = os.path.join(theme_path, "assets")
+        theme_assets_path = os.path.join(theme_path, self.config["themes_assets"])
 
-        page_assets_path = os.path.join(self.files_dir, "assets")
+        page_assets_path = os.path.join(self.files_dir, self.config["files_assets"])
 
         output_assets_dir = os.path.join(self.output_dir, "assets")
 
