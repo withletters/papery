@@ -75,8 +75,8 @@ class Validator(object):
 
     def _pykwalify(self, file_path):
         exitflg = False
-        schema_path = os.path.join(os.path.dirname(__file__), 'config_schema.yaml')
-        cmd = 'pykwalify -d ' + file_path + ' -s ' + schema_path
+        config_path = os.path.join(os.path.dirname(__file__), 'lint_configs', 'config_schema.yaml')
+        cmd = 'pykwalify -d ' + file_path + ' -s ' + config_path
         results = sum(self._execmd(cmd), [])
         for result in results:
             if result.startswith(' - '):
@@ -86,20 +86,19 @@ class Validator(object):
 
     def _yamllint(self, page):
         exitflg = False
-        results = self._execmd('yamllint ' + page)[0]
+        config_path = os.path.join(os.path.dirname(__file__), 'lint_configs', 'yamlllint.yaml')
+        results = self._execmd('yamllint -c ' + config_path + ' ' + page)[0]
         for result in results:
             if not result.startswith(' '):
                 filepass = result
             elif '' != result:
                 res = filepass.lstrip('./') + ':' + result.lstrip(' ')
-                while '  ' in res:
-                    res = res.replace('  ', ' ')
-                if 'line-length' not in res:
-                    if 'error' in res:
-                        print('\033[31m' + res + '\033[0m')
-                        exitflg = True
-                    else:
-                        print(res)
+                while '  ' in res: res = res.replace('  ', ' ')
+                if 'error' in res:
+                    print('\033[31m' + res + '\033[0m')
+                    exitflg = True
+                else:
+                    print(res)
         return exitflg
 
     def _jsonlint(self, page):
@@ -112,18 +111,10 @@ class Validator(object):
 
     def _markdownlint(self, page):
         exitflg = False
-        results = self._execmd('markdownlint ' + page)[1]
+        config_path = os.path.join(os.path.dirname(__file__), 'lint_configs', 'markdownlint.yaml')
+        results = self._execmd('markdownlint --config ' + config_path + ' ' + page)[1]
         for result in results:
-            if 'MD001/heading-increment/header-increment' not in result \
-           and 'MD013/line-length' not in result \
-           and 'MD014/commands-show-output' not in result \
-           and 'MD024/no-duplicate-header' not in result \
-           and 'MD033/no-inline-html' not in result \
-           and 'MD036/no-emphasis-as-heading/no-emphasis-as-header' not in result \
-           and 'MD041/first-line-heading/first-line-h1' not in result \
-           and 'MD043/required-headers' not in result \
-           and 'MD044/proper-names' not in result:
-                print(result)
+            print(result)
         return exitflg
 
     def _execmd(self, cmd):
