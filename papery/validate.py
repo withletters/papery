@@ -86,7 +86,7 @@ class Validator(object):
 
     def _yamllint(self, page):
         exitflg = False
-        config_path = os.path.join(os.path.dirname(__file__), 'lint_configs', 'yamlllint.yaml')
+        config_path = os.path.join(os.path.dirname(__file__), 'lint_configs', 'yamllint.yaml')
         results = self._execmd('yamllint -c ' + config_path + ' ' + page)[0]
         for result in results:
             if not result.startswith(' '):
