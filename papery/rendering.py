@@ -19,6 +19,7 @@ from __future__ import absolute_import
 from __future__ import print_function, unicode_literals
 
 import os
+import re
 import sys
 import glob
 import codecs
@@ -41,7 +42,10 @@ class Renderer(object):
                  themes_dir="themes",
                  files_dir="files",
                  output_dir="output"):
-        self.config = config
+        fixed_config = {}
+        for k, v in config.items():
+            fixed_config[re.sub('-', '_', k)] = v
+            self.config = fixed_config
 
         self.output_dir = output_dir
         self.themes_dir = themes_dir
