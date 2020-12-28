@@ -45,7 +45,7 @@ class Renderer(object):
         fixed_config = {}
         for k, v in config.items():
             fixed_config[re.sub('-', '_', k)] = v
-            self.config = fixed_config
+        self.config = fixed_config
 
         self.output_dir = output_dir
         self.themes_dir = themes_dir
