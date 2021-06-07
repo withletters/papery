@@ -1,0 +1,39 @@
+---
+type: map
+mapping:
+  author:
+    type: str
+    required: true
+  title:
+    type: str
+    required: true
+  url:
+    type: str
+    required: true
+  email:
+    type: str
+    required: true
+  keywords:
+    type: str
+    required: true
+  description:
+    type: str
+    required: true
+  theme:
+    type: str
+    required: true
+  pages:
+    type: seq
+    required: true
+    sequence:
+      - type: map
+        mapping:
+          file:
+            type: str
+            required: true
+          template:
+            type: str
+            required: true
+          path:
+            type: str
+            required: true

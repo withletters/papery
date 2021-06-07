@@ -1,16 +1,17 @@
-title : "Welcome to my web site"
-slug : "index"
-date : "2001/01/01 00:00:00"
-keywords : ""
-description : ""
-fruits :
-  - name : Apple
-    color : red
-  - name : Orange
-    color : orange
-  - name : Strawberries
-    color : red
-  - name : Pineapple
-    color : yellow
-  - name : Kiwi
-    color : green
+---
+title: "Welcome to my web site"
+slug: "index"
+date: "2001/01/01 00:00:00"
+keywords: ""
+description: ""
+fruits:
+  - name: Apple
+    color: red
+  - name: Orange
+    color: orange
+  - name: Strawberries
+    color: red
+  - name: Pineapple
+    color: yellow
+  - name: Kiwi
+    color: green

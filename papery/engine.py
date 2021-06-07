@@ -20,13 +20,14 @@ from __future__ import print_function, unicode_literals
 
 from papery import version
 from papery.papery import Papery
+from papery.validate import Validator
 
 import json
 import yaml
 import os
 import sys
 import argparse
-#import logging
+# import logging
 
 
 class Engine(object):
@@ -65,6 +66,13 @@ class Engine(object):
                                   type=int,
                                   help='output debug log')
 
+        parser_check = subparsers.add_parser('check',
+                                             help='validation')
+
+        parser_check.add_argument('--debug',
+                                  type=int,
+                                  help='output debug log')
+
         args = parser.parse_args()
 
         try:
@@ -77,6 +85,8 @@ class Engine(object):
                     config_path = '.config.yaml'
 
                 with open(config_path) as config_file:
+                    validator = Validator()
+                    validator.validate_config(config_path)
                     config = yaml.safe_load(config_file)
                     self.site = Papery(config)
             else:
@@ -86,6 +96,8 @@ class Engine(object):
                     config_path = '.config.json'
 
                 with open(config_path) as config_file:
+                    validator = Validator()
+                    validator.validate_config(config_path)
                     config = json.load(config_file)
                     self.site = Papery(config)
         except IOError:
@@ -101,3 +113,5 @@ class Engine(object):
             self.site.initialize(**args.__dict__)
         elif args.command == 'clean':
             self.site.clean(**args.__dict__)
+        elif args.command == 'check':
+            self.site.check(**args.__dict__)

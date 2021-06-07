@@ -24,6 +24,7 @@ import glob
 import codecs
 import shutil
 import filecmp
+import pprint
 
 try:
     from urlparse import urljoin
@@ -33,6 +34,7 @@ except ImportError:
 from papery.page import Page
 from papery.sitemap import Sitemap
 from papery.util import weak_tree_copy
+from papery.validate import Validator
 
 
 class Renderer(object):
@@ -64,6 +66,7 @@ class Renderer(object):
 
     def run(self):
         self._check()
+        self._validate()
         self._prepare_output()
         self._scan()
         self._render_pages()
@@ -74,6 +77,9 @@ class Renderer(object):
         self._check()
         self._scan()
         self._remove_output()
+
+    def validate(self):
+        self._validate()
 
     def _remove_output(self):
         for page, render_vars in self._targets.items():
@@ -269,3 +275,29 @@ class Renderer(object):
         sitemap = Sitemap(self._page_maps)
         path = os.path.join(self.output_dir, 'sitemap.xml')
         sitemap.save(path)
+
+    def _validate(self):
+        exitflg = False
+
+        page_list = []
+        for page in self.config["pages"]:
+            page_dirpath = os.path.dirname(page["file"])
+            page_list.append(page_dirpath)
+        page_list = list(set(page_list))
+
+        file_list = []
+        for page_dirpath in page_list:
+            for (root, dirs, files) in os.walk(page_dirpath):
+                for file in files:
+                    file_list.append(os.path.join(root, file).replace("\\", "/"))
+        file_list.append('readme.md')
+        file_list = list(set(file_list))
+        file_list.sort()
+
+        validator = Validator()
+        exitflg = True if validator.yamllint(file_list) else exitflg
+        exitflg = True if validator.jsonlint(file_list) else exitflg
+        exitflg = True if validator.mdlint(file_list) else exitflg
+
+        if exitflg:
+            sys.exit()

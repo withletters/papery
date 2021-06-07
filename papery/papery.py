@@ -76,6 +76,13 @@ class Papery(object):
                                              self.output_dir)
         renderer.clean()
 
+    def check(self, **args):
+        renderer = papery.rendering.Renderer(self.config,
+                                             self.themes_dir,
+                                             self.files_dir,
+                                             self.output_dir)
+        renderer.validate()
+
     def initialize(self, **args):
         sample_dir_path = os.path.join(os.path.dirname(__file__),
                                        'data', 'sample')
