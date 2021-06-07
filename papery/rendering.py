@@ -42,12 +42,14 @@ class Renderer(object):
     def __init__(self, config,
                  themes_dir="themes",
                  files_dir="files",
+                 favicon_dir="",
                  output_dir="output"):
         self.config = config
 
         self.output_dir = output_dir
         self.themes_dir = themes_dir
         self.files_dir = files_dir
+        self.favicon_dir = favicon_dir
 
         if "theme" not in self.config:
             self.config["theme"] = "default"
@@ -60,6 +62,9 @@ class Renderer(object):
 
         if "variables" not in self.config:
             self.config['variables'] = {}
+
+        if self.favicon_dir == "":
+            self.favicon_dir = os.path.join(self.themes_dir, self.config["theme"])
 
         self._targets = {}
         self._page_maps = []
@@ -242,7 +247,7 @@ class Renderer(object):
         if not os.path.isdir(output_assets_dir):
             os.mkdir(output_assets_dir)
 
-        favicon_path = os.path.join(theme_path, 'favicon.ico')
+        favicon_path = os.path.join(self.favicon_dir, 'favicon.ico')
         output_favicon_path = os.path.join(self.output_dir, "favicon.ico")
 
         if os.path.exists(favicon_path):
