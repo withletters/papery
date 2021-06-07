@@ -1,19 +1,22 @@
 # Makefile
+#
+# prerequisite
+# `pip install -U build twine`
+#
 
-.PHONY: egg install clean
+.PHONY: build install clean deploy
 
-all: egg
+all: build
 
-egg:
-	python setup.py sdist
+build:
+	python -m build
 
-install:
+install: build
 	python setup.py install
 
 clean:
 	python setup.py clean
-	rm -rf build dist *.egg-info
+	rm -rf build dist
 
-deploy:
-	python setup.py register
-	python setup.py sdist upload
+deploy: build
+	twine upload --repository papery dist/*
