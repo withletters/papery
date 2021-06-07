@@ -105,11 +105,15 @@ def find_package_data(where='.', package='',
                 out.setdefault(package, []).append(prefix+name)
     return out
 
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
+
 setup(
     name="papery",
     version=version,
     description="A simple static site generator - supports Markdown, YAML and JSON inputs and Jinja2 templating",
-    long_description=__doc__,
+    long_description = long_description,
+    long_description_content_type = "text/markdown",
     license="Apache License 2.0",
     author="Xcoo, Inc.",
     author_email="developer@xcoo.jp",
