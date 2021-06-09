@@ -50,6 +50,7 @@ class Post(object):
         fp.close()
 
         if link is None:
+            text = markdown2.markdown(text, extras=["tables"])
             return markdown2.Markdown().convert(text)
         else:
             return self._build_link(markdown2.Markdown().convert(text))
