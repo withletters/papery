@@ -1,2 +1,2 @@
 Jinja2>=2.6
-markdown2>=2.1.0
+markdown>=3.2

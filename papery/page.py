@@ -23,7 +23,7 @@ import re
 import jinja2
 from jinja2 import meta
 
-import markdown2
+import markdown
 import json
 import yaml
 import codecs
@@ -49,11 +49,11 @@ class Post(object):
         text = fp.read()
         fp.close()
 
+        html = markdown.markdown(text, extensions=["tables", "pymdownx.emoji"])
         if link is None:
-            text = markdown2.markdown(text, extras=["tables"])
-            return markdown2.Markdown().convert(text)
+            return html
         else:
-            return self._build_link(markdown2.Markdown().convert(text))
+            return self._build_link(html)
 
 
 class Page(object):
