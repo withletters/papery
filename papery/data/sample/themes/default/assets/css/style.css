@@ -80,5 +80,7 @@ table tr td {
 }
 
 .emojione, .twemoji, .gemoji {
-  height: 1em;
+  display: inline-flex;
+  height: 1.25em;
+  vertical-align: text-top;
 }
