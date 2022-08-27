@@ -23,7 +23,8 @@ import re
 import jinja2
 from jinja2 import meta
 
-import markdown2
+import markdown
+import pymdownx.emoji
 import json
 import yaml
 import codecs
@@ -49,11 +50,20 @@ class Post(object):
         text = fp.read()
         fp.close()
 
+        html = markdown.markdown(text,
+                                 extensions=["tables", "pymdownx.emoji"],
+                                 extension_configs = {
+                                     "pymdownx.emoji": {
+                                         "emoji_index": pymdownx.emoji.gemoji,
+                                         "emoji_generator": pymdownx.emoji.to_png,
+                                         "alt": "short",
+                                         "options": {
+                                             # TODO make "image_path" configurable by papery's configuration file for security reasons
+                                         }}})
         if link is None:
-            text = markdown2.markdown(text, extras=["tables"])
-            return markdown2.Markdown().convert(text)
+            return html
         else:
-            return self._build_link(markdown2.Markdown().convert(text))
+            return self._build_link(html)
 
 
 class Page(object):

@@ -79,3 +79,8 @@ table tr td {
     border-bottom: 1px solid #e1e1e1;
 }
 
+.emojione, .twemoji, .gemoji {
+  display: inline-flex;
+  height: 1.25em;
+  vertical-align: text-top;
+}

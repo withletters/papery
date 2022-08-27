@@ -2,6 +2,8 @@
 
 Welecome to my web site with [papery](http://github.com/withletters/papery)
 
+:smile: :heart: :thumbsup:
+
 ## A Happy Post
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
