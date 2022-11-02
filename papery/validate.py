@@ -30,7 +30,7 @@ class Validator(object):
 
     def validate_config(self, config_path):
         exitflg = False
-        if '.yaml' in config_path:
+        if '.yml' in config_path or '.yaml' in config_path:
             if self._exists_cmd('yamllint'):
                 exitflg = True if self._yamllint(config_path) else exitflg
             if self._exists_cmd('pykwalify'):
@@ -44,6 +44,9 @@ class Validator(object):
     def yamllint(self, file_list):
         exitflg = False
         if self._exists_cmd('yamllint'):
+            pagelist = [f for f in file_list if '.yml' in f]
+            for page in pagelist:
+                exitflg = True if self._yamllint(page) else exitflg
             pagelist = [f for f in file_list if '.yaml' in f]
             for page in pagelist:
                 exitflg = True if self._yamllint(page) else exitflg
@@ -93,7 +96,8 @@ class Validator(object):
                 filepass = result
             elif '' != result:
                 res = filepass.lstrip('./') + ':' + result.lstrip(' ')
-                while '  ' in res: res = res.replace('  ', ' ')
+                while '  ' in res:
+                    res = res.replace('  ', ' ')
                 if 'error' in res:
                     print('\033[31m' + res + '\033[0m')
                     exitflg = True
