@@ -19,7 +19,7 @@ def test_sitemap():
 
 </urlset>"""
 
-    path = '/tmp/sitemap.xml'
+    # path = '/tmp/sitemap.xml'
 
     pages = [{'location': "http://www.example.com/",
               'modified': 0}]

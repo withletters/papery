@@ -30,6 +30,7 @@ import yaml
 import codecs
 
 import os
+import six
 
 
 class Post(object):
@@ -52,7 +53,7 @@ class Post(object):
 
         html = markdown.markdown(text,
                                  extensions=["tables", "pymdownx.emoji"],
-                                 extension_configs = {
+                                 extension_configs={
                                      "pymdownx.emoji": {
                                          "emoji_index": pymdownx.emoji.gemoji,
                                          "emoji_generator": pymdownx.emoji.to_png,
@@ -87,7 +88,7 @@ class Page(object):
                author='', title='',
                url='', email='', keywords='', description='',
                variables={}):
-        if self.info_file_name.endswith('.yaml'):
+        if self.info_file_name.endswith('.yml') or self.info_file_name.endswith('.yaml'):
             try:
                 with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
                     info = yaml.safe_load(info_file)
@@ -187,10 +188,10 @@ class Page(object):
 
         return max(mtimes)
 
-    md_re = re.compile("^md\((.+?)\)$")
+    md_re = re.compile(r"^md\((.+?)\)$")
 
     def _scan_info(self):
-        if self.info_file_name.endswith('.yaml'):
+        if self.info_file_name.endswith('.yml') or self.info_file_name.endswith('.yaml'):
             try:
                 with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
                     info = yaml.safe_load(info_file)
@@ -224,7 +225,7 @@ class Page(object):
             for v in info:
                 files.extend(self.__scan_info(v))
 
-        elif type(info) is str or type(info) is unicode:
+        elif type(info) is str or type(info) is six.text_type:
             m = self.md_re.match(info)
 
             if m is not None:
@@ -251,7 +252,7 @@ class Page(object):
             info = newval
 
             return info
-        elif type(info) is str or type(info) is unicode:
+        elif type(info) is str or type(info) is six.text_type:
             m = self.md_re.match(info)
 
             if m is None:

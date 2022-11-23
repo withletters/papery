@@ -25,7 +25,6 @@ import glob
 import codecs
 import shutil
 import filecmp
-import pprint
 
 try:
     from urlparse import urljoin
@@ -205,6 +204,8 @@ class Renderer(object):
 
         for page, render_vars in self._targets.items():
             page_base, _ = os.path.splitext(page)
+            if os.path.exists(page_base + ".yml"):
+                info = page_base + ".yml"
             if os.path.exists(page_base + ".yaml"):
                 info = page_base + ".yaml"
             else:
