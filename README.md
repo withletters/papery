@@ -56,9 +56,8 @@ papery build
 # TODO
 
 - documentation
-- validate Markdown, JSON, and YAML syntax
 - code syntax highlight
-- styling with SASS/SCSS
+- styling with SASS/SCSS
 
 # License
 
