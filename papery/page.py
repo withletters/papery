@@ -52,8 +52,11 @@ class Post(object):
         fp.close()
 
         html = markdown.markdown(text,
-                                 extensions=["tables", "pymdownx.emoji"],
+                                 extensions=["tables", "fenced_code", "codehilite", "pymdownx.emoji"],
                                  extension_configs={
+                                     "codehilite": {
+                                         "noclasses": "True"
+                                     },
                                      "pymdownx.emoji": {
                                          "emoji_index": pymdownx.emoji.gemoji,
                                          "emoji_generator": pymdownx.emoji.to_png,
