@@ -52,7 +52,12 @@ class Post(object):
         fp.close()
 
         html = markdown.markdown(text,
-                                 extensions=["tables", "fenced_code", "codehilite", "pymdownx.emoji"],
+                                 extensions=["tables",
+                                             "fenced_code",
+                                             "codehilite",
+                                             "pymdownx.emoji",
+                                             "pymdownx.arithmatex"
+                                             ],
                                  extension_configs={
                                      "codehilite": {
                                          "noclasses": "True"
@@ -63,7 +68,12 @@ class Post(object):
                                          "alt": "short",
                                          "options": {
                                              # TODO make "image_path" configurable by papery's configuration file for security reasons
-                                         }}})
+                                         }},
+                                      "pymdownx.arithmatex": {
+                                         "inline_syntax": ["dollar", "round"],
+                                         "block_syntax": ["dollar", "square", "begin"],
+                                         "generic": "True"
+                                     }})
         if link is None:
             return html
         else:
