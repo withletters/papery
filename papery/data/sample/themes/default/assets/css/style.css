@@ -84,3 +84,39 @@ table tr td {
   height: 1.25em;
   vertical-align: text-top;
 }
+
+.headerlink {
+  color: gray;
+  cursor: pointer;
+  padding: 0px 5px;
+  text-decoration: none;
+  visibility: hidden;
+}
+
+.headerlink:hover {
+  color: blue;
+}
+
+h1:hover .headerlink {
+  visibility: visible;
+}
+
+h2:hover .headerlink {
+  visibility: visible;
+}
+
+h3:hover .headerlink {
+  visibility: visible;
+}
+
+h4:hover .headerlink {
+  visibility: visible;
+}
+
+h5:hover .headerlink {
+  visibility: visible;
+}
+
+h6:hover .headerlink {
+  visibility: visible;
+}
