@@ -206,7 +206,7 @@ class Renderer(object):
             page_base, _ = os.path.splitext(page)
             if os.path.exists(page_base + ".yml"):
                 info = page_base + ".yml"
-            if os.path.exists(page_base + ".yaml"):
+            elif os.path.exists(page_base + ".yaml"):
                 info = page_base + ".yaml"
             else:
                 info = page_base + ".json"
