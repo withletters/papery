@@ -24,6 +24,7 @@ import jinja2
 from jinja2 import meta
 
 import markdown
+import markdown.extensions.toc
 import pymdownx.emoji
 import json
 import yaml
@@ -52,7 +53,12 @@ class Post(object):
         fp.close()
 
         html = markdown.markdown(text,
-                                 extensions=["tables", "fenced_code", "codehilite", "pymdownx.emoji"],
+                                 extensions=["tables",
+                                             "fenced_code",
+                                             "codehilite",
+                                             "pymdownx.emoji",
+                                             "md_in_html",
+                                             "toc"],
                                  extension_configs={
                                      "codehilite": {
                                          "noclasses": "True"
@@ -63,7 +69,11 @@ class Post(object):
                                          "alt": "short",
                                          "options": {
                                              # TODO make "image_path" configurable by papery's configuration file for security reasons
-                                         }}})
+                                         }},
+                                     "toc": {
+                                         "permalink": "True",
+                                         "slugify": markdown.extensions.toc.slugify_unicode
+                                     }})
         if link is None:
             return html
         else:

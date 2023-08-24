@@ -1,60 +1,60 @@
 @charset "utf-8";
 
 body {
-    background: #f0f0f0;
-    font-family: Verdana, sans-serif;
-    margin: 0;
+  background: #f0f0f0;
+  font-family: Verdana, sans-serif;
+  margin: 0;
 }
 
 a {
-    text-decoration: none;
-    color: #999;
+  text-decoration: none;
+  color: #999;
 }
 
 a:hover {
-    color: #000 !important;
+  color: #000;
 }
 
 #container {
-    padding: 30px;
+  padding: 30px;
 }
 
 footer {
-    clear: both;
-    background: #dcdcdc;
-    width: 100%;
-    position: relative;
+  clear: both;
+  background: #dcdcdc;
+  width: 100%;
+  position: relative;
 }
 
 footer p {
-    padding: 3px;
-    text-align: center;
-    font-size: 10px;
-    color: #999;
+  padding: 3px;
+  text-align: center;
+  font-size: 10px;
+  color: #999;
 }
 
 #page {
 }
 
 #page h1 {
-    font-size: 24px;
-    font-weight: bold;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 #page h2 {
-    font-size: 20px;
-    font-weight: bold;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 #page h3 {
-    font-size: 18px;
+  font-size: 18px;
   padding: 30px 0 20px 0;
-    font-weight: bold;
+  font-weight: bold;
 }
 
 #page h4 {
   padding: 0 0 20px;
-    font-weight: bold;
+  font-weight: bold;
 }
 
 #page p {
@@ -75,12 +75,48 @@ table tr th {
 }
 
 table tr td {
-    padding: 10px 20px;
-    border-bottom: 1px solid #e1e1e1;
+  padding: 10px 20px;
+  border-bottom: 1px solid #e1e1e1;
 }
 
 .emojione, .twemoji, .gemoji {
   display: inline-flex;
   height: 1.25em;
   vertical-align: text-top;
+}
+
+.headerlink {
+  color: gray;
+  cursor: pointer;
+  padding: 0px 5px;
+  text-decoration: none;
+  visibility: hidden;
+}
+
+.headerlink:hover {
+  color: blue;
+}
+
+h1:hover .headerlink {
+  visibility: visible;
+}
+
+h2:hover .headerlink {
+  visibility: visible;
+}
+
+h3:hover .headerlink {
+  visibility: visible;
+}
+
+h4:hover .headerlink {
+  visibility: visible;
+}
+
+h5:hover .headerlink {
+  visibility: visible;
+}
+
+h6:hover .headerlink {
+  visibility: visible;
 }
