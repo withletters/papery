@@ -1,9 +1,7 @@
 ---
-title: "Welcome to my web site"
-slug: "index"
-date: "2001/01/01 00:00:00"
-keywords: ""
-description: ""
+title: "My web site"
+keywords: "sample"
+description: "Sample page"
 fruits:
   - name: Apple
     color: red
