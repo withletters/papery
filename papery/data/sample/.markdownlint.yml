@@ -1,0 +1,55 @@
+---
+header-increment: false # MD001
+first-header-h1: false # MD002 (Deprecated)
+header-style: # MD003
+  style: atx
+ul-style: false # MD004
+list-indent: true # MD005
+ul-start-left: false # MD006 (Deprecated)
+ul-indent: # MD007
+  indent: 4
+no-trailing-spaces: false # MD009
+no-hard-tabs: true # MD010
+no-reversed-links: true # MD011
+no-multiple-blanks: false # MD012
+line-length: false # MD0013
+commands-show-output: false # MD014
+no-missing-space-atx: true # MD018
+no-multiple-space-atx: true # MD019
+no-missing-space-closed-atx: true # MD020
+no-multiple-space-closed-atx: true # MD021
+blanks-around-headers: false # MD022
+header-start-left: true # MD023
+no-duplicate-header: false # MD024
+single-h1: false # MD025
+no-trailing-punctuation: # MD026
+  punctuation: ",:!?、。"
+no-multiple-space-blockquote: true # MD027
+no-blanks-blockquote: false # MD028
+ol-prefix: false # MD029
+list-marker-space: true # MD030
+blanks-around-fences: false # MD031
+blanks-around-lists: true # MD032
+no-inline-html: false # MD033
+no-bare-urls: false # MD034
+hr-style: # MD035
+  style: "---"
+no-emphasis-as-header: false # MD036
+no-space-in-emphasis: true # MD037
+no-space-in-code: true # MD038
+no-space-in-links: true # MD039
+fenced-code-language: false # MD040
+first-line-h1: false # MD041
+no-empty-links: true # MD042
+required-headers: false # MD043
+proper-names: false # MD044
+no-alt-text: false # MD045
+code-block-style: # MD046
+  style: fenced
+single-trailing-newline: false # MD047
+code-fence-style: false # MD048
+emphasis-style: false # MD049
+strong-style: false # MD050
+link-fragments: false #MD051
+reference-links-images: false # MD052
+link-image-reference-definitions: false # MD053

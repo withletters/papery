@@ -116,6 +116,12 @@ class Validator(object):
     def _markdownlint(self, page):
         exitflg = False
         config_path = os.path.join(os.path.dirname(__file__), 'lint_configs', 'markdownlint.yaml')
+        for (root, dirs, files) in os.walk(os.getcwd()):
+            for file in files:
+                target_path = os.path.join(root, file).replace("\\", "/")
+                if target_path.endswith(('markdownlint.yml', 'markdownlint.yaml')):
+                    config_path = target_path
+
         results = self._execmd('markdownlint --config ' + config_path + ' ' + page)[1]
         for result in results:
             print(result)

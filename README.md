@@ -4,12 +4,12 @@
 
 Static site generator with Jinja2 templates and structured content in Markdown, YAML, and JSON
 
-# Features
+## Features
 
 - Describe content with Markdown, YAML, and JSON
 - Jinja2 templating
 
-# Requirements
+## Requirements
 
 - [Jinja2](http://jinja.pocoo.org/)
 - [markdown](https://github.com/Python-Markdown/markdown)
@@ -20,17 +20,17 @@ Static site generator with Jinja2 templates and structured content in Markdown, 
 - [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
 - [pykwalify](https://github.com/Grokzen/pykwalify)
 
-# Installation
+## Installation
 
-papery is available on [pypi](https://pypi.python.org/pypi).
+Papery is available on [pypi](https://pypi.python.org/pypi).
 
 ```console
 pip install papery
 ```
 
-# Usage
+## Usage
 
-## Creating a new site
+### Creating a new site
 
 Run the following command
 
@@ -39,29 +39,34 @@ cd path/to/your_site/directory
 papery init
 ```
 
-## Run with the development server
+### Run with the development server
 
 ```console
 papery run
 ```
 
-You can see your web site via <http://localhost:8000>. All pages are automatically updated when you modified any resources.
+You can see your web site via <http://localhost:8000>. All pages are automatically updated when you modified any resources.
 
-## Build manually
+### Build manually
 
 ```console
 papery build
 ```
 
-# TODO
+### Apply local Markdownlint rules
+
+You can set local Markdownlint rule file for Markdown file validation. By setting it anywhere under `path/to/your_site/directory`, it has priority over the [default rules](https://github.com/withletters/papery/blob/master/papery/lint_configs/markdownlint.yaml).
+
+Filenames ending with `markdownlint.yaml` or `markdownlint.yml` can be used to apply Markdownlint local rules.
+
+## TODO
 
 - documentation
-- code syntax highlight
 - styling with SASS/SCSS
 
-# License
+## License
 
-Copyright 2013-2020 [Xcoo, Inc.][xcoo]
+Copyright 2013-2023 [Xcoo, Inc.][xcoo]
 
 Licensed under the [Apache License, Version 2.0][apache-license-2.0].
 
