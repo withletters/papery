@@ -99,6 +99,9 @@ class Engine(object):
                 self.init_site(f)
                 if self.site is not None:
                     break
+
+            self.site = Papery()
+
         except IOError:
             print('Not found \"config.json\" or \"config.yaml\". Papery run with default configuration.',
                   file=sys.stderr)

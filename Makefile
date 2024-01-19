@@ -12,11 +12,10 @@ build:
 	python -m build
 
 install: build
-	python setup.py install
+	pip install .
 
 clean:
-	python setup.py clean
-	rm -rf build dist
+	rm -rf dist papery.egg-info
 
 deploy: build
 	twine upload --repository papery dist/*
