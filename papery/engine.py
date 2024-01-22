@@ -32,22 +32,20 @@ import argparse
 class Engine(object):
 
     def init_site(self, f):
-        if os.path.exists(f):
+        with open(f) as config_file:
+            validator = Validator()
+            validator.validate_config(config_file)
 
-            with open(f) as config_file:
-                validator = Validator()
-                validator.validate_config(config_file)
+        with open(f) as config_file:
+            if f.endswith('.yml') or f.endswith('.yaml'):
+                config = yaml.safe_load(config_file)
+            elif f.endswith('.json'):
+                config = json.load(config_file)
+            else:
+                config = None
 
-            with open(f) as config_file:
-                if f.endswith('.yml') or f.endswith('.yaml'):
-                    config = yaml.safe_load(config_file)
-                elif f.endswith('.json'):
-                    config = json.load(config_file)
-                else:
-                    config = None
-
-                if config is not None:
-                    self.site = Papery(config)
+            if config is not None:
+                self.site = Papery(config)
 
     def __init__(self):
 
@@ -96,11 +94,13 @@ class Engine(object):
             self.site = None
 
             for f in ['config.yml', '.config.yml', 'config.yaml', '.config.yaml', 'config.json', '.config.json']:
-                self.init_site(f)
-                if self.site is not None:
-                    break
+                if os.path.exists(f):
+                    self.init_site(f)
+                    if self.site is not None:
+                        break
 
-            self.site = Papery()
+            if self.site is None:
+                self.site = Papery()
 
         except IOError:
             print('Not found \"config.json\" or \"config.yaml\". Papery run with default configuration.',
