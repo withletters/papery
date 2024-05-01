@@ -49,11 +49,12 @@ class Papery(object):
                                              self.themes_dir,
                                              self.files_dir,
                                              self.favicon_dir,
-                                             self.output_dir)
+                                             self.output_dir,
+                                             args['skip_validation'])
         renderer.run()
 
     def run_server(self, **args):
-        self.render()
+        self.render(skip_validation=args['skip_validation'])
 
         watch_dirs = []
 
@@ -66,11 +67,12 @@ class Papery(object):
 
         server = papery.serving.Server(root_dir=self.output_dir,
                                        watch_dirs=watch_dirs,
-                                       change_handler=self.rebuild)
+                                       change_handler=self.rebuild,
+                                       skip_validation=args['skip_validation'])
         server.run()
 
-    def rebuild(self):
-        self.render()
+    def rebuild(self, **args):
+        self.render(skip_validation=args['skip_validation'])
 
     def clean(self, **args):
         renderer = papery.rendering.Renderer(self.config,
