@@ -58,7 +58,8 @@ class Post(object):
                                              "codehilite",
                                              "pymdownx.emoji",
                                              "md_in_html",
-                                             "toc"],
+                                             "toc",
+                                             "pymdownx.superfences"],
                                  extension_configs={
                                      "codehilite": {
                                          "noclasses": "True"
@@ -71,6 +72,7 @@ class Post(object):
                                              # TODO make "image_path" configurable by papery's configuration file for security reasons
                                          }},
                                      "toc": {
+                                         "marker": "[toc]",
                                          "permalink": "True",
                                          "slugify": markdown.extensions.toc.slugify_unicode
                                      }})
