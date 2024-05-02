@@ -1,5 +1,7 @@
 # My web site
 
+[toc]
+
 Welecome to my web site with [papery](http://github.com/withletters/papery)
 
 :smile: :heart: :thumbsup:
@@ -35,6 +37,17 @@ def factorial(x):
     else:
         return x * factorial(x - 1)
 ```
+
+### Code block inside the lists
+
+1. You can add
+
+    ``` text
+    Some code block
+    Inside the lists
+    ```
+
+2. And continue indexing...
 
 ## Permalink
 
@@ -91,17 +104,15 @@ h3:hover .headerlink {
 - A *Markdown* text
 - Here is a example with `details` element
 
-``` html
-<details markdown="block">
-<summary> Example </summary>
+    ``` html
+    <details markdown="block">
+    <summary> Example </summary>
 
-#### Example
+    #### Example
 
-Something Markdown text...
-
-</details>
-```
-
+    Some Markdown text...
+    </details>
+    ```
 </details>
 
 ### My Favorite Fruits
