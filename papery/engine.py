@@ -68,6 +68,10 @@ class Engine(object):
                                 type=int,
                                 help='output debug log')
 
+        parser_run.add_argument('-s','--skip-validation',
+                                action='store_true',
+                                help='run development server without validation')
+
         parser_init = subparsers.add_parser('init',
                                             help='initialize site')
         parser_init.add_argument('--debug',

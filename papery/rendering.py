@@ -43,7 +43,8 @@ class Renderer(object):
                  themes_dir="themes",
                  files_dir="files",
                  favicon_dir="",
-                 output_dir="output"):
+                 output_dir="output",
+                 skip_validation=False):
         fixed_config = {}
         for k, v in config.items():
             fixed_config[re.sub('-', '_', k)] = v
@@ -53,6 +54,7 @@ class Renderer(object):
         self.themes_dir = themes_dir
         self.files_dir = files_dir
         self.favicon_dir = favicon_dir
+        self.skip_validation = skip_validation
 
         if "theme" not in self.config:
             self.config["theme"] = "default"
@@ -80,7 +82,8 @@ class Renderer(object):
 
     def run(self):
         self._check()
-        self._validate()
+        if not self.skip_validation:
+            self._validate()
         self._prepare_output()
         self._scan()
         self._render_pages()

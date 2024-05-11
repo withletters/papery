@@ -36,12 +36,13 @@ except ImportError:
 class Server(object):
 
     def __init__(self, root_dir=None, host='', port=8000,
-                 watch_dirs=[], change_handler=None):
+                 watch_dirs=[], change_handler=None, skip_validation=False):
         self.root_dir = os.path.abspath(root_dir)
         self.host = host
         self.port = port
         self.watch_dirs = [os.path.abspath(d) for d in watch_dirs]
         self.change_handler = change_handler
+        self.skip_validation = skip_validation
 
         self.work_dir = os.getcwd()
 
@@ -50,7 +51,7 @@ class Server(object):
             os.chdir(self.root_dir)
 
         wrap = RebuildHandlerWrapper(self.change_handler, self.watch_dirs,
-                                     self.work_dir)
+                                     self.work_dir, self.skip_validation)
         req_handler = wrap.request_handler
 
         HTTPServer.allow_reuse_address = True
@@ -72,7 +73,7 @@ class Server(object):
 
 class RebuildHandlerWrapper(object):
 
-    def __init__(wrap_self, rebuild, watch_dirs, work_dir):
+    def __init__(wrap_self, rebuild, watch_dirs, work_dir, skip_validation):
         """
         We can't pass arugments to HTTPRequestHandlers, because HTTPServer
         calls __init__. So make a closure.
@@ -80,6 +81,7 @@ class RebuildHandlerWrapper(object):
         wrap_self.rebuild = rebuild
         wrap_self.watch_dirs = watch_dirs
         wrap_self.work_dir = work_dir
+        wrap_self.skip_validation = skip_validation
 
         wrap_self._modtime_sum = None
         wrap_self.changed()
@@ -102,7 +104,7 @@ class RebuildHandlerWrapper(object):
                 if wrap_self.changed():
                     current_dir = os.getcwd()
                     os.chdir(wrap_self.work_dir)
-                    wrap_self.rebuild()
+                    wrap_self.rebuild(skip_validation=wrap_self.skip_validation)
                     os.chdir(current_dir)
 
                 SimpleHTTPRequestHandler.handle(self)
