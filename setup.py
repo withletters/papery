@@ -18,7 +18,8 @@
 
 from __future__ import print_function
 
-from setuptools import setup, convert_path
+from setuptools import setup
+from distutils.util import convert_path
 from fnmatch import fnmatchcase
 import os
 import sys
