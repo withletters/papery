@@ -72,7 +72,6 @@ class Post(object):
                                              # TODO make "image_path" configurable by papery's configuration file for security reasons
                                          }},
                                      "toc": {
-                                         "marker": "[toc]",
                                          "permalink": "True",
                                          "slugify": markdown.extensions.toc.slugify_unicode
                                      }})
