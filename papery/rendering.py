@@ -15,21 +15,14 @@
 # limitations under the License.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function, unicode_literals
-
 import os
 import re
 import sys
 import glob
-import codecs
 import shutil
 import filecmp
 
-try:
-    from urlparse import urljoin
-except ImportError:
-    from urllib.parse import urljoin  # NOQA
+from urllib.parse import urljoin
 
 from papery.page import Page
 from papery.sitemap import Sitemap
@@ -37,7 +30,7 @@ from papery.util import weak_tree_copy
 from papery.validate import Validator
 
 
-class Renderer(object):
+class Renderer:
 
     def __init__(self, config,
                  themes_dir="themes",
@@ -238,7 +231,7 @@ class Renderer(object):
                                 variables=self.config['variables'])
 
                 if text is not None:
-                    with codecs.open(output_file_path, 'w', encoding="utf-8") as fp:
+                    with open(output_file_path, 'w', encoding='utf-8') as fp:
                         fp.write(text)
 
             location = os.path.join(render_vars['path'], output_filename)
@@ -319,4 +312,4 @@ class Renderer(object):
         exitflg = True if validator.mdlint(file_list) else exitflg
 
         if exitflg:
-            sys.exit()
+            sys.exit(1)

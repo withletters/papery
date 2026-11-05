@@ -15,15 +15,19 @@
 # limitations under the License.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function, unicode_literals
-
+import logging
 import os
 import sys
 import subprocess
 
+from pykwalify.core import Core
 
-class Validator(object):
+# errors are reported by Validator itself
+logging.getLogger('pykwalify').addHandler(logging.NullHandler())
+logging.getLogger('pykwalify').propagate = False
+
+
+class Validator:
 
     def __init__(self):
         pass
@@ -31,25 +35,22 @@ class Validator(object):
     def validate_config(self, config_path):
         exitflg = False
         if '.yml' in config_path or '.yaml' in config_path:
-            if self._exists_cmd('yamllint'):
-                exitflg = True if self._yamllint(config_path) else exitflg
-            if self._exists_cmd('pykwalify'):
-                exitflg = True if self._pykwalify(config_path) else exitflg
+            exitflg = True if self._yamllint(config_path) else exitflg
+            exitflg = True if self._pykwalify(config_path) else exitflg
         elif '.json' in config_path:
             if self._exists_cmd('jsonlint'):
                 exitflg = self._jsonlint(config_path)
         if exitflg:
-            sys.exit()
+            sys.exit(1)
 
     def yamllint(self, file_list):
         exitflg = False
-        if self._exists_cmd('yamllint'):
-            pagelist = [f for f in file_list if '.yml' in f]
-            for page in pagelist:
-                exitflg = True if self._yamllint(page) else exitflg
-            pagelist = [f for f in file_list if '.yaml' in f]
-            for page in pagelist:
-                exitflg = True if self._yamllint(page) else exitflg
+        pagelist = [f for f in file_list if '.yml' in f]
+        for page in pagelist:
+            exitflg = True if self._yamllint(page) else exitflg
+        pagelist = [f for f in file_list if '.yaml' in f]
+        for page in pagelist:
+            exitflg = True if self._yamllint(page) else exitflg
         return exitflg
 
     def jsonlint(self, file_list):
@@ -79,18 +80,17 @@ class Validator(object):
     def _pykwalify(self, file_path):
         exitflg = False
         config_path = os.path.join(os.path.dirname(__file__), 'lint_configs', 'config_schema.yaml')
-        cmd = 'pykwalify -d ' + file_path + ' -s ' + config_path
-        results = sum(self._execmd(cmd), [])
-        for result in results:
-            if result.startswith(' - '):
-                print('\033[31m' + 'config.yaml: ' + result + '\033[0m')
-                exitflg = True
+        core = Core(source_file=file_path, schema_files=[config_path])
+        core.validate(raise_exception=False)
+        for error in core.validation_errors:
+            print('\033[31m' + file_path + ': ' + error + '\033[0m')
+            exitflg = True
         return exitflg
 
     def _yamllint(self, page):
         exitflg = False
         config_path = os.path.join(os.path.dirname(__file__), 'lint_configs', 'yamllint.yaml')
-        results = self._execmd('yamllint -c ' + config_path + ' ' + page)[0]
+        results = self._execmd([sys.executable, '-m', 'yamllint', '-c', config_path, page])[0]
         for result in results:
             if not result.startswith(' '):
                 filepass = result
@@ -129,11 +129,10 @@ class Validator(object):
 
     def _execmd(self, cmd):
         try:
-            popen = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            popen.wait()
-            cmd_result = popen.communicate()
-            results = [cmd_result[0].decode('utf-8').splitlines(),
-                       cmd_result[1].decode('utf-8').splitlines()]
+            if isinstance(cmd, str):
+                cmd = cmd.split()
+            proc = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8')
+            results = [proc.stdout.splitlines(), proc.stderr.splitlines()]
         except FileNotFoundError as e:
             results = [[], [str(e.args)]]
         return results

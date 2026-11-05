@@ -15,9 +15,6 @@
 # limitations under the License.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function, unicode_literals
-
 from papery import version
 from papery.papery import Papery
 from papery.validate import Validator
@@ -29,12 +26,11 @@ import sys
 import argparse
 
 
-class Engine(object):
+class Engine:
 
     def init_site(self, f):
-        with open(f) as config_file:
-            validator = Validator()
-            validator.validate_config(config_file)
+        validator = Validator()
+        validator.validate_config(f)
 
         with open(f) as config_file:
             if f.endswith('.yml') or f.endswith('.yaml'):
@@ -125,3 +121,7 @@ class Engine(object):
             self.site.clean(**args.__dict__)
         elif args.command == 'check':
             self.site.check(**args.__dict__)
+
+
+def main():
+    Engine()

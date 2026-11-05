@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function, unicode_literals
-
-from nose.tools import eq_
-
 from papery.sitemap import Sitemap
 
 
@@ -19,11 +13,9 @@ def test_sitemap():
 
 </urlset>"""
 
-    # path = '/tmp/sitemap.xml'
-
     pages = [{'location': "http://www.example.com/",
               'modified': 0}]
 
     sitemap = Sitemap(pages)
 
-    eq_(reference, sitemap.content, "Not match")
+    assert sitemap.content == reference

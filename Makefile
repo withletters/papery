@@ -1,21 +1,24 @@
 # Makefile
 #
 # prerequisite
-# `pip install -U build twine`
+# uv (https://docs.astral.sh/uv/)
 #
 
-.PHONY: build install clean deploy
+.PHONY: build install test clean deploy
 
 all: build
 
 build:
-	python -m build
+	uv build
 
-install: build
-	pip install .
+install:
+	uv tool install --force .
+
+test:
+	uv run pytest
 
 clean:
-	rm -rf dist papery.egg-info
+	rm -rf build dist *.egg-info
 
-deploy: build
-	twine upload --repository papery dist/*
+deploy: clean build
+	uvx twine upload --repository papery dist/*
