@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "papery"
+dynamic = ["version"]
+description = "A simple static site generator - supports Markdown, YAML and JSON inputs and Jinja2 templating"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Xcoo, Inc.", email = "developer@xcoo.jp" }]
+requires-python = ">=3.9"
+dependencies = [
+    "jinja2>=3.0",
+    "markdown>=3.4",
+    "pygments>=2.14",
+    "pymdown-extensions>=10.0",
+    "pyyaml>=6.0",
+    "yamllint>=1.30",
+    "pykwalify>=1.8",
+]
+classifiers = [
+    "Environment :: Console",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Internet :: WWW/HTTP :: Site Management",
+]
+
+[project.urls]
+Homepage = "https://github.com/withletters/papery"
+
+[project.scripts]
+papery = "papery.engine:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.hatch.version]
+path = "papery/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = ["papery", "tests", "README.md", "LICENSE"]
+exclude = ["papery/data/sample/output"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["papery"]
+exclude = ["papery/data/sample/output"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

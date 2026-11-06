@@ -15,9 +15,6 @@
 # limitations under the License.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function, unicode_literals
-
 import os
 
 import papery.serving
@@ -26,7 +23,7 @@ import papery.rendering
 from papery.util import weak_tree_copy
 
 
-class Papery(object):
+class Papery:
 
     def __init__(self, config={}):
         self.config = config
@@ -86,6 +83,7 @@ class Papery(object):
         renderer = papery.rendering.Renderer(self.config,
                                              self.themes_dir,
                                              self.files_dir,
+                                             self.favicon_dir,
                                              self.output_dir)
         renderer.validate()
 

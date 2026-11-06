@@ -15,18 +15,14 @@
 # limitations under the License.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function, unicode_literals
-
 import jinja2
 
-import codecs
 import os
 import time
 import gzip
 
 
-class Sitemap(object):
+class Sitemap:
 
     def __init__(self, pages):
 
@@ -38,16 +34,15 @@ class Sitemap(object):
         self.template_path = os.path.join(os.path.dirname(__file__),
                                           'sitemap_template.xml')
 
-        with codecs.open(self.template_path, 'r', encoding="utf-8") as fp:
+        with open(self.template_path, 'r', encoding='utf-8') as fp:
             template_text = fp.read()
-            fp.close()
 
         self.template = self.template_env.from_string(template_text)
 
     def save(self, path):
         content = self.content
 
-        with codecs.open(path, 'w', encoding="utf-8") as fp:
+        with open(path, 'w', encoding='utf-8') as fp:
             fp.write(content)
 
         with gzip.open(path + '.gz', 'wb') as gzfp:

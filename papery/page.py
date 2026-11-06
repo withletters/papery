@@ -15,9 +15,6 @@
 # limitations under the License.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function, unicode_literals
-
 import re
 
 import jinja2
@@ -28,13 +25,11 @@ import markdown.extensions.toc
 import pymdownx.emoji
 import json
 import yaml
-import codecs
 
 import os
-import six
 
 
-class Post(object):
+class Post:
 
     def __init__(self, filepath):
         self.filepath = filepath
@@ -48,9 +43,8 @@ class Post(object):
 
         # TODO(takashi) switch with language
 
-        fp = codecs.open(self.filepath, 'r', encoding="utf-8")
-        text = fp.read()
-        fp.close()
+        with open(self.filepath, 'r', encoding='utf-8') as fp:
+            text = fp.read()
 
         html = markdown.markdown(text,
                                  extensions=["tables",
@@ -81,7 +75,7 @@ class Post(object):
             return self._build_link(html)
 
 
-class Page(object):
+class Page:
 
     def __init__(self, template_dir=".", template_name="default.tmpl",
                  post_file_name="default.md",
@@ -104,7 +98,7 @@ class Page(object):
                variables={}):
         if self.info_file_name.endswith('.yml') or self.info_file_name.endswith('.yaml'):
             try:
-                with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
+                with open(self.info_file_name, 'r', encoding='utf-8') as info_file:
                     info = yaml.safe_load(info_file)
             except IOError:
                 print("Not found info file %s" % self.info_file_name)
@@ -115,7 +109,7 @@ class Page(object):
                 return None
         else:
             try:
-                with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
+                with open(self.info_file_name, 'r', encoding='utf-8') as info_file:
                     info = json.load(info_file)
             except IOError:
                 print("Not found info file %s" % self.info_file_name)
@@ -180,9 +174,8 @@ class Page(object):
 
         mtimes.append(os.path.getmtime(self.template.filename))
 
-        with codecs.open(self.template.filename, 'r', encoding="utf-8") as fp:
+        with open(self.template.filename, 'r', encoding='utf-8') as fp:
             text = fp.read()
-            fp.close()
 
         ast = self.template_env.parse(text)
         refs = list(meta.find_referenced_templates(ast))
@@ -191,9 +184,8 @@ class Page(object):
             r = refs.pop()
             t = self.template_env.get_template(r)
 
-            with codecs.open(t.filename, 'r', encoding="utf-8") as fp:
+            with open(t.filename, 'r', encoding='utf-8') as fp:
                 text = fp.read()
-                fp.close()
 
             mtimes.append(os.path.getmtime(t.filename))
 
@@ -207,7 +199,7 @@ class Page(object):
     def _scan_info(self):
         if self.info_file_name.endswith('.yml') or self.info_file_name.endswith('.yaml'):
             try:
-                with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
+                with open(self.info_file_name, 'r', encoding='utf-8') as info_file:
                     info = yaml.safe_load(info_file)
             except IOError:
                 info = {}
@@ -217,7 +209,7 @@ class Page(object):
                 info = {}
         else:
             try:
-                with codecs.open(self.info_file_name, 'r', encoding="utf-8") as info_file:
+                with open(self.info_file_name, 'r', encoding='utf-8') as info_file:
                     info = json.load(info_file)
             except IOError:
                 info = {}
@@ -239,7 +231,7 @@ class Page(object):
             for v in info:
                 files.extend(self.__scan_info(v))
 
-        elif type(info) is str or type(info) is six.text_type:
+        elif type(info) is str:
             m = self.md_re.match(info)
 
             if m is not None:
@@ -266,7 +258,7 @@ class Page(object):
             info = newval
 
             return info
-        elif type(info) is str or type(info) is six.text_type:
+        elif type(info) is str:
             m = self.md_re.match(info)
 
             if m is None:

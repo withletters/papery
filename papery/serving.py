@@ -15,25 +15,15 @@
 # limitations under the License.
 #
 
-from __future__ import print_function, unicode_literals
-
 import os
 
-try:
-    from SimpleHTTPServer import SimpleHTTPRequestHandler
-except ImportError:
-    from http.server import SimpleHTTPRequestHandler  # NOQA
-
-try:
-    from SocketServer import TCPServer as HTTPServer
-except ImportError:
-    from http.server import HTTPServer  # NOQA
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 
 # TODO(takashi) refactor
 
 
-class Server(object):
+class Server:
 
     def __init__(self, root_dir=None, host='', port=8000,
                  watch_dirs=[], change_handler=None, skip_validation=False):
@@ -71,7 +61,7 @@ class Server(object):
             server.shutdown()
 
 
-class RebuildHandlerWrapper(object):
+class RebuildHandlerWrapper:
 
     def __init__(wrap_self, rebuild, watch_dirs, work_dir, skip_validation):
         """
