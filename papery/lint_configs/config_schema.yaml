@@ -37,3 +37,18 @@ mapping:
           path:
             type: str
             required: true
+  papery:
+    type: map
+    allowempty: true
+    mapping:
+      output:
+        type: str
+      themes:
+        type: str
+      files:
+        type: str
+      favicon:
+        type: str
+  variables:
+    type: map
+    allowempty: true
